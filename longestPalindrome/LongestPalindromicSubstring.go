@@ -1,8 +1,5 @@
 package longestpalindrome
 
-import (
-	"fmt"
-)
 
 func main() {
 	s := "abac"
@@ -14,6 +11,19 @@ func longestPalindrome(s string) string {
 		return s
 	}
 	var ret string
-	fmt.Println(s)
+
+
+	
+
 	return ret
+}
+
+// 0 1 2 3 4 5 6 
+func checkPalindromic(s string) bool {
+	for i := 0; i < len(s) / 2; i++ {
+		if s[i] != s[len(s) - i] {
+			return false
+		}
+	}
+	return true
 }
