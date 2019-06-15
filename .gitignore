@@ -1,1 +1,5 @@
 .vscode
+../.idea
+../.idea/
+../.gitignore
+.idea
