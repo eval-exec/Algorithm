@@ -10,20 +10,14 @@ func main() {
 }
 
 func strStr(haystack string, needle string) int {
-
 	lengthHatstck := len(haystack)
 	lengthNeedle := len(needle)
 	if lengthNeedle == 0 {
 		return 0
 	}
-
-
 	if  lengthHatstck < lengthNeedle{
 		return -1
 	}
-
-
-
 	for i := 0; i < lengthHatstck - lengthNeedle + 1; i++ {
 		if strEqul([]byte(needle),[]byte(haystack[i:i+ lengthNeedle])) {
 			return i
