@@ -28,12 +28,18 @@ func divide(dividend int, divisor int) int {
 			dividend -= divisor
 			ret++
 		} else {
-				break
+			break
 		}
 	}
 	if stat {
+		if ret > 2147483647 {
+			return 2147483647
+		}
 		return ret
 	} else {
+		if ret < -2147483648 {
+			return -2147483648
+		}
 		return -ret
 	}
 }
