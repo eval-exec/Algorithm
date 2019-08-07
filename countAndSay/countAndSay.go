@@ -1,19 +1,16 @@
 package main
 
-import (
-	"fmt"
-)
-
 func main() {
-	str := countAndSay(5)
+	str := countAndSay(2)
 	println(str)
+	println(string(1))
 }
 func countAndSay(n int) string {
 	if n == 1 {
-		return "11"
+		return "1"
 	}
-	var out = "11"
-	for i := 0 ; i < n ; i++ {
+	var out = "1"
+	for i := 1 ; i < n ; i++ {
 		out =  getAndSay(out)
 	}
 	return out
@@ -51,5 +48,5 @@ func count(str string) (count int) {
 
 func say(str string,count int)(say string){
 
-	return fmt.Sprint(count) + str[:1]
+	return string(count) + str[:1]
 }
