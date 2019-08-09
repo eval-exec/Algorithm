@@ -32,6 +32,11 @@ func main() {
 	println(isS)
 
 }
+func printBigByte(input [][]byte){
+	for _, item := range input {
+		printByte(item)
+	}
+}
 
 func printByte(input []byte){
 	for _, val := range input {
@@ -95,7 +100,11 @@ func getGrids(board [][]byte) (ret [][]byte) {
 		}
 	}
 
-	ret = board
+	ret = make([][]byte, len(board))
+	for index, _ := range ret {
+		ret[index] = make([]byte, len(board[0]))
+	}
+
 
 	for i := 0; i < 9; i++ {
 		var retIndex int
@@ -118,22 +127,20 @@ func getGrids(board [][]byte) (ret [][]byte) {
 
 func getRows(board [][]byte) (ret [][]byte) {
 
-	printByte(board[0])
 
-	ret  = make([][]byte, len(board))
-	copy(ret, board)
+	ret = make([][]byte, len(board))
+	for index, _ := range ret {
+		ret[index] = make([]byte, len(board[0]))
+	}
 
 
 	for index1, value1 := range board{
 		for index2, value2 := range value1 {
-			println(ret[index2][index1])
 			ret[index2][index1] = value2
-			println(ret[index2][index1])
-			println(value2)
 		}
 	}
-	printByte(ret[0])
-	panic(nil)
+
+
 	return
 
 }
