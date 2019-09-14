@@ -32,7 +32,6 @@ func Test_search(t *testing.T) {
 			},
 			-1},
 	}
-
 	for i := 0; i < 10; i++ {
 		nums := generateArray()
 		fmt.Println(nums,"is nums")
@@ -100,6 +99,9 @@ func rotateArray(nums []int)[]int {
 func findTarget(nums []int, target int) int {
 	for index, item := range nums {
 		if item == target {
+			fmt.Println(nums,"is want in")
+			fmt.Println(target,"is want target")
+			fmt.Println(index,"is index")
 			return index
 		}
 	}
