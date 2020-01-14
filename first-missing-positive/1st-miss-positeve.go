@@ -27,8 +27,21 @@ Your algorithm should run in O(n) time and uses constant extra space.
 */
 
 func firstMissingPositive(nums []int) int {
-	//
-	//
-	return 0
+	length := len(nums)
+	if length == 0 {
+		return 1
+	}
+	nums2 := make([]int, length)
+	for _, n := range nums {
+		if n <= 0 || n > length {
+			continue
+		}
+		nums2[n-1] = n
+	}
+	for i, n := range nums2 {
+		if n == 0 {
+			return i + 1
+		}
+	}
+	return length + 1
 }
-
