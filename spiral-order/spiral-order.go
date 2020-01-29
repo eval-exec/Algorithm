@@ -23,7 +23,7 @@ func spiralOrder(matrix [][]int) []int {
 		col: columnNum - 1,
 	}
 
-	for M.row <= N.row && M.col <= N.col {
+	for M.row <= N.row && M.col <= N.col && M.row >= 0 && M.col >= 0 && N.row >= 0 && N.col >= 0 {
 		ret = append(ret, stripMatrix(&matrix, M, N)...)
 		M.row++
 		M.col++
@@ -45,7 +45,7 @@ func stripMatrix(matrix *[][]int, m, n Pixel) (outer []int) {
 	}
 	if m.col == n.col {
 		for i := m.row; i <= n.row; i++ {
-			outer = append(outer, (*matrix)[m.col][i])
+			outer = append(outer, (*matrix)[i][m.col])
 		}
 		return
 	}
