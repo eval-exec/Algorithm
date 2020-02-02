@@ -13,18 +13,14 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func (l *ListNode) hasFollower() bool {
-	return l.Next != nil
-}
-
 func sortList(head *ListNode) *ListNode {
-	if head == nil || !head.hasFollower(){
+	if head == nil || head.Next == nil {
 		return head
 	}
 
 	preslow, slow, fast := head, head, head
 
-	for fast != nil && fast.hasFollower() {
+	for fast != nil && fast.Next != nil {
 		preslow = slow
 		slow = slow.Next
 		fast = fast.Next.Next
@@ -35,11 +31,11 @@ func sortList(head *ListNode) *ListNode {
 	l2 := slow
 
 
-	if l1.hasFollower() {
+	if l1.Next != nil  {
 
 		l1= sortList(l1)
 	}
-	if l2.hasFollower() {
+	if l2.Next != nil {
 
 		l2= sortList(l2)
 	}
