@@ -3,3 +3,12 @@
 ../.idea/
 ../.gitignore
 .idea
+
+CMakeCache.txt
+CMakeFiles/
+CMakeLists.txt
+cmake-build-debug
+Makefile
+**/CMakeLists.txt
+**/cmake_install.cmake
+**/bin/
