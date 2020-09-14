@@ -51,10 +51,10 @@ public:
     }
 };
 
-TEST(Solution,Find){
+TEST(Solution, Find) {
     int nums[] = {1, 2, 3, 4, 4, 4, 4, 4, 5};
     Solution s;
-    EXPECT_EQ(7,s.Find(nums,9,4));
+    EXPECT_EQ(7, s.Find(nums, 9, 4));
 }
 
 int main(int argc, char **argv) {
