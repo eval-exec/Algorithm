@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <gtest/gtest.h>
 
 /*
  *
@@ -11,7 +11,7 @@
 class Solution {
 
 private:
-    int bisect_eq_last(const int nums[], const int length, const int target) {
+    int Bisect_eq_last(const int nums[], const int length, const int target) {
         if (length == 0 || nums[0] > target || nums[length - 1] < target) {
             return -1;
         }
@@ -25,7 +25,7 @@ private:
 
 
         while (low <= high) {
-            int mid = low + ((high - low) >> 2);
+            int mid = low + ((high - low) >> 1);
             if (nums[mid] == target) {
                 if (nums[mid + 1] != target) {
                     return mid;
@@ -37,7 +37,7 @@ private:
             if (nums[mid] < target) {
                 low = mid + 1;
             } else {
-                high = mid + 1;
+                high = mid - 1;
             }
         }
 
@@ -46,22 +46,21 @@ private:
     }
 
 public:
-
-    int find(const int nums[], const int length, const int target) {
-        return bisect_eq_last(nums, length, target);
+    int Find(const int nums[], const int length, const int target) {
+        return Bisect_eq_last(nums, length, target);
     }
-
 };
 
-int main() {
-
-    Solution s;
+TEST(Solution,Find){
     int nums[] = {1, 2, 3, 4, 4, 4, 4, 4, 5};
-
-    int index = s.find(nums, 9, 4);
-    if (index != 7) {
-        std::cout << "failed,get " << index << std::endl;
-        return -1;
-    }
-    return 0;
+    Solution s;
+    EXPECT_EQ(7,s.Find(nums,9,4));
 }
+
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+
+
+    return RUN_ALL_TESTS();
+}
+
