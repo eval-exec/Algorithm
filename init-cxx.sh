@@ -10,6 +10,21 @@ mkdir $dirname
 touch $dirname/main.cxx
 
 echo "
+#include <bits/stdc++.h>
+#include <gtest/gtest.h>
+
+using namespace std;
+
+
+int main() {
+    testing::InitGoogleTest();
+
+    return RUN_ALL_TESTS();
+}
+
+" >> $dirname/main.cxx
+
+echo "
 
 cmake_minimum_required(VERSION 3.17)
 project(leetcode_solutions)

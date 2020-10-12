@@ -3,6 +3,7 @@
 ../.idea/
 ../.gitignore
 .idea
+**/a.out
 
 CMakeCache.txt
 CMakeFiles/
