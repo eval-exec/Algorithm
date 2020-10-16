@@ -4,6 +4,8 @@
 ../.gitignore
 .idea
 **/a.out
+**/main
+**/.gdb_history
 
 CMakeCache.txt
 CMakeFiles/
