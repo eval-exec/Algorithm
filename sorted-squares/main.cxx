@@ -64,7 +64,30 @@ TEST(Solution, sortedSquares) {
     squares = solution.sortedSquares(nums);
     print(squares);
 
+
+    nums = {-9, -8, -7, -6, -5, -4, -3, -2, -1, 2};
+    print(nums);
+    squares = solution.sortedSquares(nums);
+    print(squares);
+
 }
+
+class Solution2 {
+public:
+    vector<int> sortedSquares(vector<int> &A) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(0);
+        vector<int> ans = A;
+        int i = 0;
+        int j = A.size() - 1;
+        int n = j;
+        while (i <= j) {
+            ans[n] = abs(A[i]) > abs(A[j]) ? A[i] * A[i++] : A[j] * A[j--];
+            n--;
+        }
+        return ans;
+    }
+};
 
 
 int main() {
