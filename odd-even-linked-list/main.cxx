@@ -28,7 +28,28 @@ struct ListNode {
 
 class Solution {
 public:
+
     ListNode *oddEvenList(ListNode *head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode *even = head;
+        ListNode *odd = head->next;
+        ListNode *rOdd = odd;
+
+        while (odd != nullptr && odd->next != nullptr) {
+            even->next = even->next->next;
+            even = even->next;
+            odd->next = odd->next->next;
+            odd = odd->next;
+        }
+        // 1.2.3.4.5
+        // 1.2.3.4
+        even->next = rOdd;
+        return head;
+    }
+
+    ListNode *oddEvenList1(ListNode *head) {
         if (head == nullptr) {
             return nullptr;
         }
