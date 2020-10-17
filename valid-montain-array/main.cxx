@@ -5,7 +5,7 @@
 using namespace std;
 
 
-class Solution {
+class Solution2 {
 public:
     bool validMountainArray(vector<int> &A) {
         if (A.size() < 3) {
@@ -38,6 +38,32 @@ public:
             tmp = v;
         }
         return haver && haved;
+    }
+};
+
+
+class Solution {
+public:
+    bool validMountainArray(vector<int> &A) {
+        if (A.size() < 3) {
+            return false;
+        }
+        int i = 1;
+        int len = A.size();
+        while (i <= len - 1 && A[i] > A[i - 1]) {
+            i++;
+        }
+
+        if (i == 1 || i == len) {
+            return false;
+        }
+
+        while (A[i] < A[i - 1] && i <= len - 1) {
+            i++;
+        }
+
+        return i == len;
+
     }
 };
 

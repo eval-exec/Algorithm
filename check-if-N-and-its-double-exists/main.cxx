@@ -83,7 +83,7 @@ TEST(Solution, checkIfExist) {
 
     nums = {-2, 0, 10, -19, 4, 6, -8};
     ASSERT_EQ(solution.checkIfExist(nums), false);
-    
+
     nums = {-2, 1, 0, 0, -19, 4, 6, -8};
     ASSERT_EQ(solution.checkIfExist(nums), true);
 }
