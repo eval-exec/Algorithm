@@ -39,34 +39,24 @@ public:
         int len = arr.size();
 
         for (int i = 0; i < len; i++) {
-            if (bisect(arr, arr[i] * 2, i + 1, len - 1)) {
+            if (bisect(arr, arr[i] * 2, i)) {
                 return true;
             }
         }
         return false;
-
-
     }
 
 private:
-    bool bisect(vector<int> &arr, int target, int left, int right) {
+    bool bisect(vector<int> &arr, int target, int i) {
+        int left = 0;
+        int right = arr.size() - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (arr[left] != target) {
-                left++;
-            } else {
-                return true;
-            }
-            if (arr[right] != target) {
-                right--;
-            } else {
-                return true;
-            }
             if (arr[mid] == target) {
-                return true;
+                return mid != i;
             }
             if (arr[mid] > target) {
-                right = mid + 1;
+                right = mid - 1;
             } else {
                 left = mid + 1;
             }
@@ -77,13 +67,25 @@ private:
 
 TEST(Solution, checkIfExist) {
     Solution solution;
-    vector<int> nums = {10, 2, 5, 3};
+    vector<int> nums;
+
+    nums = {10, 2, 5, 3};
     ASSERT_EQ(solution.checkIfExist(nums), true);
 
     nums = {7, 1, 14, 1};
     ASSERT_EQ(solution.checkIfExist(nums), true);
+
     nums = {3, 1, 7, 11};
     ASSERT_EQ(solution.checkIfExist(nums), false);
+
+    nums = {-10, 12, -20, -8, 15};
+    ASSERT_EQ(solution.checkIfExist(nums), true);
+
+    nums = {-2, 0, 10, -19, 4, 6, -8};
+    ASSERT_EQ(solution.checkIfExist(nums), false);
+    
+    nums = {-2, 1, 0, 0, -19, 4, 6, -8};
+    ASSERT_EQ(solution.checkIfExist(nums), true);
 }
 
 
