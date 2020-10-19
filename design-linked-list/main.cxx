@@ -111,7 +111,7 @@ public:
             head = head->next;
             i++;
         }
-        if ( i == index){
+        if (i == index) {
             listT *t = new listT(val);
             prev->next = t;
         }
@@ -224,7 +224,6 @@ TEST(Solution, linkList) {
 
     obj.deleteAtIndex(0);
     print(obj);
-
 }
 
 TEST(test2, test2) {
@@ -247,7 +246,7 @@ TEST(test2, test2) {
     obj.addAtHead(6);
     obj.addAtTail(4);
     int i = obj.get(4);
-    cout << "got"<< i<< endl;
+    cout << "got" << i << endl;
     obj.addAtHead(4);
     obj.addAtIndex(5, 0);
     obj.addAtHead(6);
