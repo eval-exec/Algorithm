@@ -44,6 +44,39 @@ public:
         ret.insert(ret.end(), right.begin(), right.end());
         return ret;
     }
+
+
+    vector<int> inorderTraversal(TreeNode *root) {
+        if (!root) {
+            return {};
+        }
+
+        vector<int> left = inorderTraversal(root->left);
+        vector<int> right = inorderTraversal(root->right);
+
+        vector<int> ret;
+        ret.insert(ret.end(), left.begin(), left.end());
+        ret.push_back(root->val);
+        ret.insert(ret.end(), right.begin(), right.end());
+        return ret;
+    }
+
+
+    vector<int> postorderTraversal(TreeNode *root) {
+        if (!root) {
+            return {};
+        }
+
+        vector<int> left = postorderTraversal(root->left);
+        vector<int> right = postorderTraversal(root->right);
+
+        vector<int> ret;
+        ret.insert(ret.end(), left.begin(), left.end());
+        ret.push_back(root->val);
+        ret.insert(ret.end(), right.begin(), right.end());
+        return ret;
+    }
+
 };
 
 
@@ -111,7 +144,6 @@ TEST(Solution, preOrderTravesal) {
     };
 
     vector<int> nodes = {1, 2, 3, 4, 5, 6};
-    TreeNode *pNode = gen(nodes);
 
     for (T t: ts) {
         cout << "checking ..." << endl;
