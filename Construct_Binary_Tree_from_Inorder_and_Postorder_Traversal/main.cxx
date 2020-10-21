@@ -153,6 +153,46 @@ public:
     }
 };
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution2 {
+public:
+    unordered_map<int, int> pos;
+    int pred;
+
+    TreeNode *build(vector<int> &inorder, vector<int> &postorder, unordered_map<int, int> &pos, int start, int end) {
+        if (start > end)
+            return NULL;
+        TreeNode *root = new TreeNode(postorder[pred]);
+        pred--;
+        if (start == end)
+            return root;
+        int index = pos[root->val];
+        root->right = build(inorder, postorder, pos, index + 1, end);
+        root->left = build(inorder, postorder, pos, start, index - 1);
+        return root;
+    }
+
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
+        int i, n = inorder.size();
+        if ((n == 0) || (n != postorder.size()))
+            return NULL;
+        pred = n - 1;
+        for (i = 0; i < n; i++)
+            pos[inorder[i]] = i;
+        return build(inorder, postorder, pos, 0, n - 1);
+    }
+};
+
 TEST(Solution, construct_binary_tree) {
     T ts[] = {
             {
