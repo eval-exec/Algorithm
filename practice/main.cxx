@@ -23,10 +23,30 @@ public:
 map<int,int> mm;
 };
 
-int main() {
-    testing::InitGoogleTest();
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n <= 2){
+            mm[n] = n;
+            return n;
+        }
+        
+        auto x = mm.find(n);
+        if (x!= mm.end()){
+            return x->second;
+        }
 
-    return RUN_ALL_TESTS();
+        int ans = climbStairs(n-1) + climbStairs(n-2);
+        mm[n] = ans;
+        return ans;
+	}
+private:
+	map<int,int> mm;
+};
+int main() {
+	testing::InitGoogleTest();
+
+	return RUN_ALL_TESTS();
 }
 
 
