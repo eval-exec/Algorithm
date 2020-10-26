@@ -28,6 +28,36 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+class Solution2 {
+public:
+    bool isValidBST(TreeNode *root) {
+        if (!root) {
+            return true;
+        }
+        return valid(root->left, nullptr, root)
+               && valid(root->right, root, nullptr);
+    }
+
+    bool valid(TreeNode *root, TreeNode *min, TreeNode *max) {
+        if (!root) {
+            return true;
+        }
+        if (min && min->val >= root->val) {
+            return false;
+        }
+        if (max && max->val <= root->val) {
+            return false;
+        }
+        if (!root->left) {
+            return valid(root->right, root, max);
+        }
+        if (!root->right) {
+            return valid(root->left, min, root);
+        }
+        return valid(root->left, min, root) && valid(root->right, root, max);
+    }
+};
+
 class Solution {
 public:
     bool isValidBST(TreeNode *root) {
