@@ -9,12 +9,34 @@ dirname=$1
 mkdir $dirname
 touch $dirname/main.cxx
 
-echo "
-#include <bits/stdc++.h>
+echo "#include <bits/stdc++.h>
 #include <gtest/gtest.h>
 
 using namespace std;
 
+
+
+
+
+
+struct T{
+
+}
+
+TEST(Solution,test){
+    T ts[] = {
+        {
+
+        },
+
+    };
+
+    Solution solution;
+    
+    for (T t : ts){
+
+    }
+}
 
 int main() {
     testing::InitGoogleTest();
