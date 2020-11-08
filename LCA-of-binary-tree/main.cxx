@@ -33,6 +33,25 @@ All Node.val are unique.
 p != q
 p and q will exist in the tree.
  */
+// another solutino
+
+class Solution {
+    public:
+        TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+            if (root->val < p->val && root->val < q->val){
+                return lowestCommonAncestor(root->right<Plug>PeepOpen,q);
+
+            }
+            if (root->val > p->val && root->val > q->val){
+                return lowestCommonAncestor(root->left<Plug>PeepOpen,q);
+
+            }
+            return root;
+
+
+        }
+
+};
 
 
 int get(vector<int> nodes, int i) {
@@ -115,89 +134,89 @@ struct T {
 };
 
 class Solution {
-public:
-    TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
-        map<TreeNode *, TreeNode *> mm;
-        map<TreeNode *, int> md;
-        mm[root] = root;
-        md[root] = 1;
-        dig(root, md, mm, 2);
-        return find(md, mm, p, q);
-    }
-
-private:
-    TreeNode *find(map<TreeNode *, int> &md, map<TreeNode *, TreeNode *> &mm, TreeNode *p, TreeNode *q) {
-        if (p == q) {
-            return q;
+    public:
+        TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+            map<TreeNode *, TreeNode *> mm;
+            map<TreeNode *, int> md;
+            mm[root] = root;
+            md[root] = 1;
+            dig(root, md, mm, 2);
+            return find(md, mm, p, q);
         }
-        int pd = md[p];
-        int qd = md[q];
-        if (pd > qd) {
-            int n = pd - qd;
-            while (n) {
-                p = mm[p];
-                n--;
+
+    private:
+        TreeNode *find(map<TreeNode *, int> &md, map<TreeNode *, TreeNode *> &mm, TreeNode *p, TreeNode *q) {
+            if (p == q) {
+                return q;
             }
-        } else {
-            if (qd > pd) {
-                int n = qd - pd;
+            int pd = md[p];
+            int qd = md[q];
+            if (pd > qd) {
+                int n = pd - qd;
                 while (n) {
-                    q = mm[q];
+                    p = mm[p];
                     n--;
                 }
+            } else {
+                if (qd > pd) {
+                    int n = qd - pd;
+                    while (n) {
+                        q = mm[q];
+                        n--;
+                    }
+                }
+            }
+            while (p != q) {
+                p = mm[p];
+                q = mm[q];
+            }
+            return p;
+        }
+
+        void dig(TreeNode *node, map<TreeNode *, int> &md, map<TreeNode *, TreeNode *> &m, int depth) {
+            if (!node->left && !node->right) {
+                return;
+            }
+            if (node->left) {
+                m[node->left] = node;
+                md[node->left] = depth;
+                dig(node->left, md, m, depth + 1);
+            }
+            if (node->right) {
+                m[node->right] = node;
+                md[node->right] = depth;
+                dig(node->right, md, m, depth + 1);
             }
         }
-        while (p != q) {
-            p = mm[p];
-            q = mm[q];
-        }
-        return p;
-    }
-
-    void dig(TreeNode *node, map<TreeNode *, int> &md, map<TreeNode *, TreeNode *> &m, int depth) {
-        if (!node->left && !node->right) {
-            return;
-        }
-        if (node->left) {
-            m[node->left] = node;
-            md[node->left] = depth;
-            dig(node->left, md, m, depth + 1);
-        }
-        if (node->right) {
-            m[node->right] = node;
-            md[node->right] = depth;
-            dig(node->right, md, m, depth + 1);
-        }
-    }
 };
 
 class Solution {
-public:
-    TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
-        if (!root or p == root or q == root)return root;
-        TreeNode *t1, *t2;
-        t1 = lowestCommonAncestor(root->left, p, q);
-        t2 = lowestCommonAncestor(root->right, p, q);
-        if (t1 == nullptr && t2 == nullptr) {
-            return nullptr;
+    public:
+        TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+            if (!root or p == root or q == root)return root;
+            TreeNode *t1, *t2;
+            t1 = lowestCommonAncestor(root->left, p, q);
+            t2 = lowestCommonAncestor(root->right, p, q);
+            if (t1 == nullptr && t2 == nullptr) {
+                return nullptr;
+            }
+            if (t1 && t2) {
+                return root;
+            }
+            if (!t1) {
+                return t2;
+            } else {
+                return t1;
+            }
         }
-        if (t1 && t2) {
-            return root;
-        }
-        if (!t1) {
-            return t2;
-        } else {
-            return t1;
-        }
-    }
 };
 
 TEST(Solution, LCA) {
     Solution solution;
     T ts[] = {
-            {
+        {
 
-            }
+        }
     };
 
 
