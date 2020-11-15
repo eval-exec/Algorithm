@@ -9,33 +9,33 @@ class Solution {
 public:
     int totalFruit(vector<int> &tree) {
         int len = tree.size();
-        vector<dp_item> dp(len);
-        dp[0] = dp_item(1);
-        dp[0].mm[tree[0]] = 1;
+        dp_item dp_last = dp_item(1);
+        dp_last.mm[tree[0]] = 1;
         int ret = 1;
         for (int i = 1; i < len; i++) {
             int now = tree[i];
             int last = tree[i - 1];
-            auto dp_last = dp[i - 1];
+            dp_item dp_now;
 
             if (now == last) {
-                dp[i] = dp_item(dp_last.ccount + 1);
-                dp[i].mm = dp_last.mm;
-                dp[i].mm[now] += 1;
-                ret = max(ret, sum(dp[i].mm));
+                dp_now = dp_item(dp_last.ccount + 1);
+                dp_now.mm = dp_last.mm;
+                dp_now.mm[now] += 1;
+                ret = max(ret, sum(dp_now.mm));
             } else {
                 if (dp_last.mm.find(now) != dp_last.mm.end()) {
-                    dp[i] = dp_item(1);
-                    dp[i].mm = dp_last.mm;
-                    dp[i].mm[now] += 1;
-                    ret = max(ret, sum(dp[i].mm));
+                    dp_now = dp_item(1);
+                    dp_now.mm = dp_last.mm;
+                    dp_now.mm[now] += 1;
+                    ret = max(ret, sum(dp_now.mm));
                 } else { // new key
-                    dp[i] = dp_item(1);
-                    dp[i].mm[now] = 1;
-                    dp[i].mm[tree[i - 1]] = dp_last.ccount;
-                    ret = max(ret, sum(dp[i].mm));
+                    dp_now = dp_item(1);
+                    dp_now.mm[now] = 1;
+                    dp_now.mm[tree[i - 1]] = dp_last.ccount;
+                    ret = max(ret, sum(dp_now.mm));
                 }
             }
+            dp_last = dp_now;
 
         }
         return ret;
@@ -56,6 +56,7 @@ private:
 
         dp_item() {
         }
+
 
         dp_item(int count) : ccount(count) {
         }
