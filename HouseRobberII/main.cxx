@@ -48,6 +48,47 @@ private:
 };
 
 
+class Solution2 {
+public:
+    int rob(vector<int> &nums) {
+        int len = nums.size();
+        if (len == 0) return 0;
+        if (len == 1) return nums[0];
+        if (len == 2) return max(nums[0], nums[1]);
+
+        array<int, 4> memo{0};
+        memo[0] = 0;
+        memo[1] = nums[len - 1];
+        memo[2] = nums[0];
+        memo[3] = 0;
+        // 0 1 2
+        // 0 1 2
+        // 0 1 2 3 4 5
+        // 0 1 2 3 4 5 6
+        int end = len / 2 - 1;
+        for (int i = 1; i <= end; i++) {
+            array<int, 4> tmp(memo);
+            memo[0] = max4(tmp[0], tmp[1], tmp[2], tmp[3]);
+            memo[1] = nums[len - 1 - i] + max(tmp[0], tmp[2]);
+            memo[2] = nums[i] + max(tmp[0], tmp[1]);
+            memo[3] = nums[i] + nums[len - 1 - i] + tmp[0];
+        }
+
+        if (len % 2 == 0) {
+            return max(max(memo[0], memo[1]), memo[2]);
+        } else {
+            return max(nums[end + 1] + memo[0],
+                       max4(memo[0], memo[1], memo[2], memo[3]));
+        }
+    }
+
+private:
+    int max4(int n1, int n2, int n3, int n4) {
+        return max(max(max(n1, n2), n3), n4);
+    }
+};
+
+
 struct T {
 
 };
