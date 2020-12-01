@@ -3,8 +3,7 @@
 
 using namespace std;
 
-
-class Solution {
+class Solution2 {
 public:
     bool wordBreak(string s, vector<string> &wordDict) {
         return wordBreak(s, 0, wordDict);
@@ -43,22 +42,59 @@ private:
 };
 
 
+class Solution {
+public:
+    bool wordBreak(string s, vector<string> &wordDict) {
+        vector<bool> dp(s.size());
+        for (int i = 0; i < s.size(); i++) {
+            if (i > 0) {
+                if (!dp[i - 1]) continue;
+            }
+
+            for (const string &word : wordDict) {
+                if (s.compare(i, word.size(), word, 0) == 0) {
+                    printf("%d %s\n", i, word.c_str());
+                    dp[i + word.size() - 1] = true;
+                }
+            }
+        }
+
+        for (int i : dp) {
+            cout << i << " ";
+        }
+        cout << endl;
+
+        return dp[s.size() - 1];
+    }
+};
+
+
 struct T {
+    string s;
+    vector<string> wordDist;
+    bool expect;
 
 };
 
 TEST(Solution, test) {
     T ts[] = {
             {
-
+                    .s="leetcode",
+                    .wordDist={"leet", "code"},
+                    .expect=true,
             },
+            {
+                    .s="catsandog",
+                    .wordDist={"cats", "dog", "sand", "and", "cat"},
+                    .expect = false,
+            }
 
     };
 
-    Solution solution;
 
     for (T t : ts) {
-
+        Solution solution;
+        EXPECT_EQ(solution.wordBreak(t.s, t.wordDist), t.expect);
     }
 }
 
