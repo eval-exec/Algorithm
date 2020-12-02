@@ -7,6 +7,31 @@ using namespace std;
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int> &nums) {
+        vector<int> ret(nums.size());
+        int pd = 1;
+        for (int i = 0; i < nums.size(); i++) {
+            pd *= nums[i];
+            ret[i] = pd;
+        }
+
+        pd = 1;
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            int left = 1;
+            if (i > 0) {
+                left = ret[i - 1];
+            }
+            ret[i] = left * pd;
+            pd *= nums[i];
+        }
+
+        return ret;
+    }
+};
+
+
+class Solution2 {
+public:
+    vector<int> productExceptSelf(vector<int> &nums) {
         vector<pair<int, int>> dp(nums.size());
         dp[0].first = nums[0];
         for (int i = 1; i < nums.size(); i++) {
