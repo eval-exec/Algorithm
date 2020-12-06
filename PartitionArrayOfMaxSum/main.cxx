@@ -27,6 +27,35 @@ class Solution {
     }
 };
 
+// optimized:
+/*
+ * ger current max :
+ * from O(K) -> O(1)
+ *
+ * total O(N*k*k) -> O(n*K)
+ */
+class Solution_Optimized {
+  public:
+    int maxSumAfterPartitioning(vector<int> &arr, int k) {
+        vector<int> dp(arr.size());
+        {
+            int max_n = arr[0];
+            for (int i = 0; i < k; i++) {
+                max_n = max(max_n, arr[i]);
+                dp[i] = max_n * (i + 1);
+            }
+        }
+        for (int i = k; i < arr.size(); i++) {
+            int max_cur = arr[i];
+            for (int j = i; j >= i - k + 1; j--) {
+                max_cur = max(max_cur, arr[j]);
+                dp[i] = max(dp[i], dp[j - 1] + max_cur * (i - j + 1));
+            }
+        }
+        return dp[arr.size() - 1];
+    }
+};
+
 struct T {
 
 };
