@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class Solution {
+class Solution_recursion {
   public:
     int minFallingPathSum(vector<vector<int>> &A) {
         int sum = INT_MAX;
@@ -27,6 +27,28 @@ class Solution {
         }
         memo[{level, prev_idx}] = min_sum;
         return min_sum;
+    }
+};
+
+class Solution {
+  public:
+    int minFallingPathSum(vector<vector<int>> &A) {
+        vector<int> dp(A[0].size());
+        for (int i = 0; i < A[0].size(); i++) {
+            dp[i] = A[A.size() - 1][i];
+        }
+
+        for (int i = A.size() - 2; i >= 0; i--) {
+            vector<int> tmp(A[0].size());
+            for (int j = 0; j < A[0].size(); j++) {
+                int min_bom = dp[j];
+                if (j > 0) min_bom = min(min_bom, dp[j - 1]);
+                if (j < A[0].size() - 1) min_bom = min(min_bom, dp[j + 1]);
+                tmp[j] = A[i][j] + min_bom;
+            }
+            dp = tmp;
+        }
+        return *min_element(dp.begin(), dp.end());
     }
 };
 
