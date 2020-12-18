@@ -3,14 +3,10 @@
 
 using namespace std;
 class Solution {
-  public:
-    bool validUtf8(vector<int> &data) {
+  private:
+    bool validate(vector<int> &data) {
         if (data.empty()) return true;
-        for (int d : data) {
-            if (d > 255) {
-                return false;
-            }
-        }
+
         if ((data[0] & (~(1 << 7))) == data[0]) {
             vector<int> tmp(data);
             tmp.erase(tmp.begin());
@@ -35,6 +31,15 @@ class Solution {
         }
         vector<int> tmp(data.begin() + len, data.end());
         return validUtf8(tmp);
+    }
+  public:
+    bool validUtf8(vector<int> &data) {
+        for (int d : data) {
+            if (d > 255) {
+                return false;
+            }
+        }
+        return validate(data);
     }
 };
 
