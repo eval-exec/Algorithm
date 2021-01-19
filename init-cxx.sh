@@ -1,6 +1,6 @@
 #! /bin/sh
-set -evx
-if [ -z "$1" ]; then
+set -e
+if [ 1 -ne "$#" ]; then
   echo "need one argument"
   exit 1
 fi
@@ -21,7 +21,7 @@ using namespace std;
 
 struct T{
 
-}
+};
 
 TEST(Solution,test){
     T ts[] = {
@@ -31,9 +31,9 @@ TEST(Solution,test){
 
     };
 
-    Solution solution;
-    
+
     for (T t : ts){
+        Solution solution;
 
     }
 }
@@ -60,3 +60,4 @@ echo "
 
 add_subdirectory($dirname)
 " >>CMakeLists.txt
+echo init $1 success
