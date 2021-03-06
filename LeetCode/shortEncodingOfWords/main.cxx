@@ -1,0 +1,532 @@
+#include <bits/stdc++.h>
+#include <gtest/gtest.h>
+using namespace std;
+
+class Solution {
+  public:
+    int minimumLengthEncoding(vector<string> &ws) {
+        unordered_map<char, Node *> roots;
+        int ret = 0;
+        unordered_set<string> words;
+        for (const auto &word:ws) {
+            words.insert(word);
+        }
+        for (const auto &word : words) {
+            int len = word.size();
+            char last = word[len - 1];
+            auto f = roots.find(last);
+            if (f == roots.end()) {
+                roots[last] = new Node(last);
+                ret += len + 1;
+                put(roots[last], word.substr(0, len - 1));
+            } else {
+                Node *root = f->second;
+                int nd = 0;
+                bool fork = false;
+                for (int i = len - 2; i >= 0; i--) {
+                    if (root->nexts.find(word[i]) == root->nexts.end()) {
+                        nd++;
+                        if (!root->nexts.empty()) fork = true;
+                    }
+                    root = get(root, word[i]);
+                }
+                if (fork) {
+                    ret += len + 1;
+                } else {
+                    ret += nd;
+                }
+            }
+        }
+        return ret;
+    }
+  private:
+    class Node {
+      public:
+        char c;
+        map<char, Node *> nexts;
+
+        Node(char v) {
+            c = v;
+        };
+    };
+    void put(Node *node, string str) {
+        if (str.empty()) return;
+        for (int i = str.size() - 1; i >= 0; i--) {
+            node = get(node, str[i]);
+        }
+    }
+    Node *get(Node *node, char c) {
+        auto f = node->nexts.find(c);
+        if (f == node->nexts.end()) {
+            Node *nc = new Node(c);
+            node->nexts[c] = nc;
+            return nc;
+        }
+        return f->second;
+    }
+};
+
+struct T {
+    vector<string> inputs;
+    int e;
+
+};
+
+TEST(Solution, test) {
+    T ts[] = {
+        {
+            .inputs={
+                "atime",
+                "aatime",
+                "btime",
+            },
+            .e=13,
+        },
+        {
+            .inputs={
+                "time",
+                "me",
+                "bell",
+            },
+            .e=10,
+        },
+        {
+            .inputs={
+                "me",
+                "time",
+            },
+            .e=5,
+        },
+        {
+            .inputs={
+                "time",
+                "atime",
+                "btime"
+            },
+            .e=12,
+        },
+        {
+            .inputs={
+                "mokgggq", "pjdislx", "bfrbsfs", "hgwqzz", "bnwxc", "pzhmyo", "wbfton", "evdro", "uwxuzmn", "mdwfn",
+                "rinmw", "cwvvrea", "aqyxlev", "ipypqev", "cbdhb", "ynqok", "lieciy", "sqhmdh", "pcotcq", "vyeqmey",
+                "gvpbu", "kvhaag", "qkaqq", "mwtmzzs", "gtywt", "cnowp", "ibfdgvp", "jybmx", "gseqh", "yaohcp",
+                "jgarzaz", "lgxogb", "cjjiev", "tjfbf", "qwtlx", "hehmv", "oergh", "ovehsf", "zifrfb", "tbykq",
+                "oasqrsw", "hjmzil", "fuylmzc", "zokxci", "wbyspc", "cqwsb", "oftqr", "wvgtmrq", "ymfyjm", "odrnphc",
+                "mnoms", "frhelt", "gokypg", "yoafppu", "mmquko", "klnvy", "atcfwzv", "yjmluf", "hckdblw", "wreortt",
+                "osuidhr", "vmvopqa", "snilp", "lpygwbe", "esqpirj", "lacnfr", "dnyehuz", "qfvuo", "jvnlky", "gdnzemt",
+                "isewa", "hvmfts", "nuxsog", "cckcw", "bmxtsb", "ozlilc", "wmhku", "uhoni", "ckkbb", "uwrakdx",
+                "kciqov", "xrpjq", "lqvbs", "fyrglkp", "xfbgq", "vrojsdw", "wwivh", "frgontv", "fgghrms", "psxdbxb",
+                "ezapa", "lvihja", "oydcdih", "ztefj", "khpoypx", "llwgyuq", "heepqf", "lneold", "lxcyjrt", "yrnzmvm",
+                "kwcluhu", "qoqbzzu", "cuwmp", "qiejx", "fnqceo", "myizd", "thggnqx", "ixwbbve", "gjwruu", "alpglnk",
+                "zrhmh", "evkojps", "gvwol", "pystdn", "yhcjrd", "qtyhucx", "cwmbh", "vrlmw", "bwkntib", "isyyx",
+                "bptejfp", "gctufb", "lewtr", "llkwsi", "rokvhw", "jwagu", "axchu", "llshkne", "lnrwco", "ylnkjsu",
+                "ukdaxm", "byfnel", "deecwis", "xwjjf", "xwsyfi", "bvnen", "supbi", "dzara", "qtnyslh", "zflzqu",
+                "rfbsz", "yiwbok", "kpvpmey", "aosdked", "gjogz", "pwaww", "qpqhoz", "avlxwv", "aakku", "ykpjq",
+                "biejhfz", "ngnmk", "gucufvo", "zonyhu", "pwbnko", "dianhi", "svdulhs", "seaqz", "tupyev", "rfsde",
+                "qgvwnz", "ijjpsx", "vwwizu", "cegwsql", "snsrb", "kzarfp", "xsvwq", "zdend", "hnnib", "ghtfd",
+                "pgdlfx", "iyrfnl", "xhnpif", "axinxpx", "cttjnl", "gmkji", "ewbecn", "fqpvci", "iazmng", "ehfmc",
+                "wsmjtm", "vsxto", "cguyk", "mncgl", "brafj", "jvpivd", "ljburu", "pgxbvd", "ewxxx", "trmshp", "spfdgn",
+                "oczwdxj", "wvnared", "ktzmiu", "kdqww", "saeuudb", "mwzel", "sbihma", "jemgzpm", "oogsc", "lvhtgm",
+                "thuis", "ljkdo", "ewgvbu", "emuxgt", "kgxyfdi", "tzwmlof", "canbgua", "nwqeqwg", "ikmorv", "uzanjn",
+                "npmjwyl", "hwkdfld", "bbmil", "kgfro", "qamev", "nuvhoh", "pklbp", "yzfplx", "bcifen", "gimid",
+                "xiiqj", "pvvcocj", "skshvmq", "nlhsqt", "zqttm", "xuskbm", "jejdbjq", "xecjgs", "udenjcp", "tsrekhp",
+                "iisxmwb", "gmtovot", "kqcfsdo", "efpsvqi", "ylhxyv", "tvamwgp", "kidlop", "amwsk", "xeplp", "tkuhek",
+                "qaweb", "orrzhb", "ogiylt", "muvbpg", "ooiebj", "gtkqk", "uurhse", "cmwmgh", "yiaogkj", "famrlgt",
+                "nslern", "hsdfss", "asujt", "hbdmg", "qokzr", "razeq", "vwfrnu", "hbgkrf", "betedj", "wctub", "dpfrrv",
+                "zengra", "elphsd", "lkvhwx", "xutmp", "huqpltl", "qaatefx", "zarfa", "dliudeh", "ggniy", "cvarq",
+                "rjjkqs", "xkzztf", "vjmoxa", "cigku", "cvmlpfj", "vxmmb", "kqxfn", "nuwohcs", "sezwzhd", "xpglr",
+                "ypmuob", "flqmt", "ergssgv", "ourdw", "sexon", "kwhdu", "vdhdes", "inellc", "urjhgcj", "vipnsis",
+                "rwtfs", "nrahj", "jnnxk", "emesdw", "iyiqq", "luuadax", "ueyurq", "vzbcshx", "flywfhd", "kphagyo",
+                "tygzn", "alauzs", "oupnjbr", "rpqsl", "xpqbqkg", "tusht", "llxhgx", "bdmhnbz", "kwzxtaa", "mhtoir",
+                "heyanop", "bvjrov", "udznmet", "kxrdmr", "vmldb", "qtriy", "qfmbt", "ppxgclr", "jywhzz", "rdntkwp",
+                "hlejhf", "pvqjag", "zcnudmz", "wcyuaqz", "tudmp", "kluqos", "slygy", "zkixjqg", "socvj", "igvxwq",
+                "oyugfh", "jscjg", "qmigl", "yazwe", "shzapa", "zqgmc", "rmfrfz", "tdgquiz", "ducbvxz", "uiddcnw",
+                "aapdunz", "bagnif", "dbjyal", "qgbram", "bivve", "vxrtcs", "szwigrl", "zmuteys", "zagudtp", "lrjmobu",
+                "ozbgh", "hvoxaw", "xmjna", "lqlkqqq", "oclufg", "ovbokv", "oezekn", "hcfgcen", "aablpvt", "ejvzn",
+                "tzncr", "lhedw", "wiqgdb", "gctgu", "zczgt", "vufnci", "jlwsm", "dcrqe", "ghuev", "exqdhff", "kvecua",
+                "relofjm", "jjznnjd", "imbklr", "sjusb", "tqhvlej", "jcczqnz", "vyfzx", "audyo", "ckysmmi", "oanjmb",
+                "fhtnb", "rzqagl", "wxlxmj", "nyfel", "wruftl", "uuhbsje", "oobjkmy", "litiwj", "dxscotz", "znvixpd",
+                "nsxso", "ieati", "iaodgc", "dgyvzr", "rvfccm", "cchxt", "raiqi", "owzwnr", "rkosimq", "dyrscbo",
+                "ppjtey", "ebnuom", "bifrbq", "teclf", "ztbbyr", "omrehv", "wtrvc", "dllgjc", "guxeicj", "udmxbe",
+                "zrvravk", "dnric", "sbnxmxv", "ckzah", "qzbrlq", "gtmjvoq", "xarml", "jeqco", "hnodvno", "fomdpk",
+                "coqoudc", "eochkh", "hdghbb", "jiiyrvp", "vsdydi", "owctgdz", "hqafd", "zhjktay", "yqcfv", "ajququ",
+                "gftptr", "amllxns", "sisfbef", "tdjwhz", "wrvkr", "hqxuo", "bhrjk", "igjldkr", "ujqwaj", "ufksq",
+                "kmfai", "zsjiot", "civroa", "eqpoiu", "hjpnw", "snxdde", "vxkro", "lvyddk", "rfskh", "zcnjtk", "hsszo",
+                "uxnnj", "yghbnl", "cunqr", "pkbwwy", "ozjxbzt", "sxqxmz", "arkjqwp", "buwcygp", "eqthat", "lqrofq",
+                "wwfmh", "xjddhyu", "nluzkk", "sofgqaw", "yrwhfg", "pkhiq", "kpupg", "eonip", "ptkfqlu", "togolji",
+                "exrnx", "keofq", "jltdju", "jcnjdjo", "qbrzz", "znymyrb", "cjjma", "dqyhp", "tcmmlpj", "qictc",
+                "jgswqyq", "jcrib", "myajs", "dsqicw", "llszo", "kxjsos", "xxstde", "vavnq", "rjelsx", "lermaxm",
+                "gqaaeu", "neovumn", "azaeg", "lztlxhi", "pqbaj", "wjujyo", "hldxxb", "ocklr", "lgvnou", "egjrf",
+                "scigsem", "orrjki", "ncugkks", "dfpui", "zbmwda", "gqlxi", "xawccav", "rtels", "bewrq", "xvhkn",
+                "pyzdzju", "voizx", "cxuxll", "kyyyg", "qdngpff", "dvtivnb", "lsurzr", "xyxcev", "ojbhjhu", "qxenhl",
+                "lgzcsib", "xwomf", "yevuml", "anfpjp", "hsqxxna", "wknpn", "hpeffdv", "yjqvvyz", "eoctiv", "wannxu",
+                "slxnf", "ijadma", "uaxypn", "xafpljk", "nysxmyv", "nfhvjfd", "nykvxrp", "nvpvf", "dxupo", "pvyqjdx",
+                "wyzudq", "vgwpkyj", "qlhbvp", "hvhpmh", "djwukq", "rdnmazf", "gnnryn", "mllysxq", "iapvpe", "zcpayi",
+                "amuakk", "slwgc", "pbqffyw", "emlurpa", "kecswbq", "pfbzg", "opjexe", "savxot", "finntqj", "tnzroga",
+                "jktlrsn", "beyir", "txsvlt", "qjkbxr", "qomtajo", "ytvkqbz", "dxantfq", "zsstb", "sonmv", "rxplgr",
+                "ltmnnl", "najvi", "ucdrotu", "smeccv", "iqyssw", "ytkgn", "ccrzv", "iepvgw", "zbnyyh", "mupzq",
+                "ztghi", "ztyaen", "efnzco", "ugsyq", "puokxgl", "ceqotz", "yytwzik", "gxsbdne", "vgcjgyu", "sfidsno",
+                "cqkvw", "rscfgmv", "zpoblc", "oslpwhv", "tsvsa", "xdrty", "dcbejb", "twxul", "fozhwha", "hkehs",
+                "mclhfm", "kfxfpx", "oplmpq", "cmfzuu", "rmbyhmf", "rcivkmz", "mgabniw", "hghapx", "wmoxvuk", "kupmpud",
+                "snspozp", "zveqzy", "omxxlfq", "gaill", "lpazav", "kxywrju", "lcgtepu", "zbmlcl", "lpzhv", "pszeto",
+                "vzmbso", "kbokpl", "uoqmat", "fdkwjg", "kytvxew", "gzzreyo", "wxdyynx", "twchm", "lsxbxma", "tzbva",
+                "fnazkc", "qmvpa", "mxoiz", "nmxzmn", "ufimada", "dvrow", "tqxxsd", "xucms", "loraesj", "mbqdp",
+                "mkcnovs", "pmvip", "uksrfu", "ngxcbel", "acbgch", "jynevd", "pewhh", "rtuymc", "jxqvb", "ylrdr",
+                "nfbnsxo", "blcyz", "twndeik", "dnfku", "yrckw", "ozzqt", "bxftit", "ooidimg", "mpvgc", "otobnvo",
+                "fbczc", "paybdj", "yedrbz", "qwlijd", "uyamzc", "cehtizz", "xejofd", "hlvqt", "iracei", "ppjlp",
+                "jymqay", "vbdtxw", "svhdn", "srylnl", "arpbta", "yiasrg", "chmlmof", "oaoagf", "ntiwo", "heuvqrv",
+                "ygudcn", "ujoxgw", "vcxysn", "xxvbcz", "gubka", "lcteegl", "mfjqu", "jmrll", "xmpefxb", "fxhlx",
+                "qgtcw", "itldt", "xbhhno", "wjlkr", "mkoumfo", "clccuxo", "ksflxgu", "cviwbab", "ggxcbmm", "aosxdgi",
+                "ucaqtvm", "tzkquj", "dcdjfl", "vykusrg", "ayxfjy", "vejuy", "bnqxwd", "fnrbwd", "uvkjmu", "rgneg",
+                "wcqrldl", "lokksi", "evoqgp", "xzpvts", "xbjudib", "zdpttvp", "tbvbi", "pzvfn", "giicqi", "cyjsrd",
+                "vvyvdn", "trvxk", "xkwzirg", "smzaoc", "jvpncjy", "carcxzy", "azmnrz", "tkffh", "kalra", "emoowz",
+                "qfjcz", "tbcpi", "unmas", "fxdhi", "wegea", "vjnbmu", "hbxxa", "updrj", "kanisyn", "qzqfa", "rbyfleo",
+                "gvpud", "vvrnda", "ntgcz", "niiqd", "okmqocr", "hlmuoir", "cllmy", "pvgcyui", "klubnzd", "henjf",
+                "ucmilyk", "bdzvhvy", "zifmo", "cidvxii", "unfcw", "uzsgfv", "rvimhmz", "rrneanz", "tmtptt", "wwdzgb",
+                "kxlofp", "muvdf", "ojlkit", "xjioe", "hdmrl", "uotxsd", "wblmhvw", "kyatg", "lueyjj", "edcqlhh",
+                "yigtdu", "mkqvux", "ognxpmw", "obdpmbo", "doguzpy", "pmeuq", "egkwgm", "zmjps", "blxurlk", "tcdsvz",
+                "cpttk", "oones", "zulotp", "bbjmmft", "qkchbbb", "ddoyf", "qwykri", "rtdhc", "xzeopey", "dwwzu",
+                "absoj", "pyhxrz", "xkzppy", "hukvxis", "mrlzdcn", "rowai", "jehovhy", "ctrho", "icfhdp", "mjgmdju",
+                "hxujna", "bzmfac", "hpnpfvb", "zhnnuzl", "exfpqk", "uusye", "abklkm", "hpwybsm", "pttzcdz", "mmkao",
+                "uxkqle", "mllnhh", "gqggto", "mgntzzx", "xtdef", "xdhgjq", "bkvcqzj", "grvdv", "agjof", "nxxonak",
+                "ssdwci", "wjkcwl", "bvgwiaw", "aehhhox", "miyxnt", "ztjbho", "npuynrk", "qnjch", "urwuyw", "hjclv",
+                "qhbvvt", "enyzud", "pfeyzwd", "fozvoz", "zisyj", "hzdbri", "wyylyi", "fjvwf", "svfmn", "edhcu",
+                "eprzr", "vbhsezf", "isudgte", "qszip", "ilqnce", "rmrjlw", "opaweid", "juzdv", "ehtiv", "yzcosn",
+                "rimplj", "yhdre", "onklj", "xyrzj", "fpkebll", "hvjyjkb", "koczlof", "iovlifd", "uqvvw", "xyfueng",
+                "twynd", "ktmkxzq", "qcvwd", "uxnjdh", "exzkjjx", "vefasx", "ufgtg", "cmllk", "whqpy", "uiqka",
+                "lxnwzw", "jblxgd", "dxvuvf", "llxqaz", "qzxqeq", "smfiri", "qwalddg", "qqkianf", "oshgkag", "qalgka",
+                "sedaqv", "logbadp", "hmklzj", "qdqcqj", "cdwcudk", "sqgvhsh", "llloqjx", "binnlcs", "fjaow", "uirnxyz",
+                "zffqat", "akdzyhn", "pmcwu", "elnge", "uyelt", "uzsod", "qwfarib", "lowtshb", "wgzaiwm", "xzcppu",
+                "azfoudu", "zvargi", "mhospi", "bfqemy", "krhnt", "dolixge", "ofpqew", "xjslrou", "djjueg", "nbjtp",
+                "zahjb", "vdbxeg", "vooqz", "hflenpk", "xpyxqmq", "wkkdtd", "cfcgj", "unrprg", "keszevs", "cequp",
+                "hsjio", "ayprq", "alpzyk", "erikrmm", "ftxfgde", "lopqyg", "oxlqbi", "tiiht", "itanzk", "vpduf",
+                "uxbgkqt", "vztwrdf", "bcqleo", "zbrteyu", "mzhvxw", "esnlm", "uctdwz", "dmhnw", "dhoqk", "ulsokg",
+                "ecceh", "lfkyscl", "turgt", "jctmib", "psrlmq", "gdwpniq", "hahedwt", "ajbigo", "qtfmiv", "dtzij",
+                "oceesy", "hothyg", "vfadpdf", "hppiu", "pjgiee", "isxxbpp", "dwnoh", "cgnill", "zufyk", "mpoeo",
+                "pqyxc", "ehpyix", "aulgyr", "dtdvk", "snlmd", "uswfmev", "jhypcm", "nreeygx", "sjbuqp", "uajrx",
+                "bvgci", "cktys", "mioopek", "tojhyqu", "hihlal", "lhviecc", "kczwrkd", "belivo", "gcxlt", "vtqorps",
+                "fdvnwku", "kllox", "xgnyfqr", "xwvfqa", "hshmm", "lugfp", "ugcxki", "yiyylah", "imjcspq", "lpsts",
+                "ifvkz", "veheym", "yxbrib", "wyhpjhn", "izwaqvn", "kjpdj", "chcnl", "tbxld", "rskqzjm", "fisxhi",
+                "dwepxp", "cfxjbl", "mjqpe", "renbc", "lnqdq", "psyhms", "unqmse", "mlivyuw", "ajzrmjt", "fmmsrx",
+                "ggvwrg", "evnhtbx", "ednufjc", "goows", "olofgl", "wpfrr", "wuvype", "fwjto", "vnazt", "ujrhkec",
+                "noxme", "pbkaz", "larkdu", "ebuxauc", "vkjqer", "ldelp", "sojxqfg", "wbvbut", "qgsooz", "ixtgd",
+                "qioslp", "pqgua", "mfnvz", "fkinlrh", "qtenoc", "syenus", "fkplm", "qvlies", "unolnf", "bftvtl",
+                "ifzbp", "zckbjz", "rwokr", "iqipnz", "nyrsnty", "klneq", "rtizom", "nzxvaf", "kwsknn", "delmgu",
+                "lvrtoi", "xgpcn", "zovahx", "kqykd", "zllzd", "ciskyi", "qmkow", "zwbwgni", "qixaqyp", "bbpdxz",
+                "gpyddcr", "emwcbkv", "qymwpuk", "gzfwr", "bqtsjm", "zzjuarn", "tuczqbf", "focyyew", "aajkpt",
+                "doxpudb", "iihqftz", "iplmetd", "awzllw", "mjafnh", "gzqmt", "bcbqbek", "wkpda", "hdhnced", "vescmqn",
+                "tvsof", "ontvba", "ywmawy", "yzucwi", "fqziiur", "pmydwpt", "dliolrc", "jnsou", "tvswwhb", "yogoial",
+                "vayef", "fwvhh", "wwlck", "mrzrjcx", "xzqxcif", "irynybr", "gzyqisa", "lnflfzy", "xmepwne", "unyjrem",
+                "zgblsf", "rtmomdy", "eshld", "xmwikj", "fnupbcw", "fcipz", "uciehpe", "kmtnut", "ectqzea", "swrit",
+                "frrchku", "swcgsu", "shkxvt", "zjjcx", "gtcez", "xblhk", "gubhe", "pnaoos", "yypewih", "cbzbk",
+                "jjxbq", "nzqycdl", "mrjjfyk", "itkzfhc", "uambd", "gictm", "atwntt", "cenrao", "hzmlgfv", "cyamfon",
+                "pldrrnv", "ebtzqx", "jonga", "ktgmiy", "qiqseiz", "npitnk", "fzwuen", "mvxhb", "obidnqw", "plola",
+                "pijaf", "jistxtn", "dcxxk", "ruxbphm", "qzaneb", "ioyqmy", "wayuno", "wbvmck", "pmcxo", "qtada",
+                "kbxnj", "knhmjtl", "kiqxiro", "jcpsi", "cyhvmo", "hsomp", "tkxxf", "mneqtp", "ntrcat", "wgvgmr",
+                "varaytv", "pbida", "yqolnz", "chxwvp", "vchgf", "hohypb", "zohgdc", "xspsy", "hxaefb", "zaomwg",
+                "ghpniya", "vvsmcwk", "ycnxjh", "hyrkc", "zmlyxmy", "nxwrij", "vgnda", "scpzuwu", "ibnbzhk", "tmavs",
+                "bvdhfbl", "cjudij", "udgqjbs", "svyrq", "kmhthi", "prapa", "xlibves", "dqddqmx", "tqcipdw", "uqgrhl",
+                "fczoo", "pptncy", "vvaylkt", "xjznf", "zdjori", "atuzhd", "qmttkmb", "rsfkvw", "rqxscu", "rxrwc",
+                "zvptpuc", "ahdvce", "ftaidk", "apahhfj", "iskrwxa", "ellsp", "lwjvg", "rcbsw", "dtbmi", "ejwti",
+                "hdyzyf", "gbmdm", "gmrzr", "jbgje", "hnuapiv", "yogxasw", "kjuxrxi", "ejjzwq", "qthpshr", "ufqqa",
+                "drswm", "sqcdrm", "zharf", "duefy", "pfrsnfs", "ywygkk", "debqn", "ttsbv", "jqoqn", "dtwopta",
+                "psgxiz", "gpuiy", "rtghkgu", "qcmhksu", "lcoseb", "vzewq", "gxiux", "ryqht", "nrljfdm", "dztatif",
+                "lkehf", "rmrox", "rnntci", "zhliree", "rlfpo", "dpdup", "qhjspn", "hpsqhi", "wbnub", "pwgkle",
+                "bldsutn", "nhugm", "llxvj", "nkulvoy", "aihuf", "lqflwp", "lekamz", "fdnfln", "fjtplf", "zinbih",
+                "jvqovhr", "ehmlp", "qaprv", "mdnfd", "xjgon", "nqsdbj", "odrjtab", "qzsjq", "ripgmer", "ljgsxt",
+                "sciqi", "yaqykph", "rfunhjy", "abygu", "ibldxl", "fhsgodn", "lnneny", "clcemc", "pviqaqg", "ywpchy",
+                "baksyet", "tnfmw", "dkpvx", "bykxod", "qwzrn", "kmrfrv", "asxodt", "yuismpd", "cxfcrc", "kbkioi",
+                "ivspipn", "vmjcb", "kpnotnf", "jncttso", "mvoexeu", "gxgkb", "ihpszdp", "ihuzlsb", "ztyzdp", "gsvmymx",
+                "ldhfbb", "wmjymr", "gbcjub", "ltxge", "picika", "qhjywi", "ctxwfma", "awnzi", "cgdwc", "gyfpuzr",
+                "taqohj", "bdmeo", "zwrsref", "fhixq", "drvryni", "lmgsd", "rihhz", "twwhyy", "bhzob", "mwypg",
+                "nrmyzv", "pmfvmst", "mizvjy", "tdsfg", "weoma", "ckrzl", "zvcgqz", "pjnuw", "nqrde", "qcnem", "grhis",
+                "nqozqd", "gefinct", "ipmzvrp", "rgiqruj", "eoqdeva", "dimxz", "ixrhlpt", "bfwkm", "ufwjp", "aoszp",
+                "ahpyp", "hghcyv", "rqlti", "pcpnpo", "efxyxdm", "atgcrj", "okadwcw", "igavnan", "bfxqc", "tdvdr",
+                "zretcfp", "siymap", "tugzn", "wulwhre", "lmfqz", "ixjsxwc", "gsozyoj", "bdolsf", "korwx", "fvlpk",
+                "kuebj", "ublpu", "ciglmvs", "siwqcdx", "xclnxlf", "vdycdl", "utsoyxq", "ugjnsxj", "hppqtce", "ciijifs",
+                "mxbyw", "ptwill", "rbahig", "twafrt", "qgppawc", "terobw", "qcjpv", "aauvybv", "wjfbvx", "hrmfd",
+                "ibtwu", "bnrgqm", "lrloxuk", "rzippvx", "cbjekyh", "cggdym", "czynzdj", "qurxnfa", "mclrra", "byxfrrp",
+                "vcryit", "umkva", "zulxwp", "sfvjsyl", "lvosyl", "mfjfprv", "pudrmc", "liineqn", "jqrfff", "apgrfu",
+                "xusxh", "vbbla", "unvsvm", "zhaax", "ztcnucd", "iuhnod", "meeglt", "lyvaoq", "pqjhuq", "afsjig",
+                "mrnffa", "vngwa", "fveunc", "vmvnx", "wxdxosn", "hfwybx", "fmwna", "qnbxae", "rrmyoax", "rnjhywy",
+                "vstnd", "ewnllhr", "wsvxenk", "cbivijf", "nysamc", "zoyfna", "uotmde", "zkkrpmp", "ttficz", "rdnds",
+                "uveompq", "emtbwb", "drhwsf", "bmkafp", "yedpcow", "untvymx", "yyejqta", "kcjakg", "tdwmu", "gecjncx",
+                "cxezgec", "xonnszm", "mecgvq", "kdagva", "ucewe", "chsmeb", "kscci", "gzoia", "ovdojr", "mwgbxe",
+                "gibxxlt", "mfgpo", "jkhob", "hwquiz", "wvhfaia", "sxhikny", "dghcawc", "phayky", "shchy", "mklvgh",
+                "yabxat", "rkmrfs", "pfhgrw", "wtlxebg", "mevefcq", "uvhvgo", "nldxkdz", "dwybxh", "ycmlybh", "aqvod",
+                "tsvfhw", "uhvuc", "wcsxe", "afyzus", "jhfyk", "vghpfv", "nprfou", "vsxmc", "hiiiewc", "uehpmz",
+                "jzffnr", "twbuhn", "ahrbzqv", "rvmffb", "vrmynfc", "upnuka", "jghpuse", "dwrbkhv", "nveuii", "nefmnf",
+                "aowjzzo", "yfcprb", "ojihgh", "jfnit", "ovkpf", "bhyqx", "enyrhm", "ljqxp", "pzpfjr", "qligbi",
+                "udoqp", "naxqyjp", "jriibb", "iccscme", "rhnwh", "xfajbc", "gopeq", "kurqqru", "qyzpd", "twfaem",
+                "nopsy", "yqcpwa", "xzhoc", "rwval", "zqhyid", "mnmaobk", "bzsxfa", "kmgqo", "quxchux", "mimqbx",
+                "djuok", "injzi", "nekayg", "oiyytj", "vgwdob", "epmbtws", "whwkeph", "ddfwxo", "nlobf", "adrqb",
+                "lzzownl", "iuhka", "upfjos", "kjiua", "xjgud", "qqqnwqc", "bgvooqf", "qjurybc", "ufsnhxp", "fjpkb",
+                "pztffxh", "qeqcgg", "tfills", "rkmbus", "wpsmuk", "moqeh", "nyiayg", "bejhle", "gszvfjw", "fnskvxi",
+                "nhxyzxi", "trwseu", "jdnptzx", "fiotq", "xspgs", "ddnyc", "yhxjxus", "hkwrzd", "rmvsyi", "eqbjf",
+                "gymahyo", "vuxso", "ekagz", "vozvpu", "euzcdla", "qvernpp", "seejev", "tetez", "eosct", "fxuicyl",
+                "mwyzg", "qeujko", "gpnizxr", "azxslf", "faepd", "nsvcr", "rxcty", "kmtnoe", "tuwoxf", "xewnebm",
+                "qlegtb", "qxlust", "qnlje", "ptdlpvq", "tjmwt", "nddiu", "qanqplx", "kxckhbq", "lvtyy", "cqwdax",
+                "irvigyr", "mpdqgvy", "qbvysre", "ezluyj", "qshkht", "fjxyezs", "lquxor", "rxtgdy", "ezlzb", "addqjj",
+                "fucytk", "mmbjy", "gtkjcnz", "fourguz", "ffhtah", "yhyxwcm", "svmofbn", "gvzve", "cizjcea", "vkdtt",
+                "hdivkwt", "utnjaf", "svvrkeh", "qyxpd", "qlinqj", "xvesol", "bykuhwp", "mjodd", "trurbet", "ahzxm",
+                "hkxhvo", "bhccyxf", "elobjqo", "igdxmj", "twkdf", "gmogg", "lzmljtj", "jhgrq", "ndiye", "sgaaavr",
+                "mxxvrkm", "vyvvi", "pcafw", "cverpds", "bvpjmw", "pcqzlg", "fmwhf", "ctviwh", "tgmjzsd", "uvtwwy",
+                "pbxhcmg", "tbiwyru", "efzimj", "dcujj", "lxbndb", "ysbhy", "lqwnjdz", "ontmb", "dfsxzto", "ubwbyv",
+                "htjmvu", "ahzxszy", "ivttau", "cfimiy", "fkjfmw", "gscep", "bwdjojj", "knwosp", "gznvty", "izgfoyl",
+                "zayof", "jqjpk", "vosohad", "xjqtry", "zdgvx", "cbgvmn", "iskhag", "qdzxb", "lfivyh", "ltpzk",
+                "wexodoi", "zheod", "wtamnc", "lnjhy", "bwozgnh", "dvdpsy", "puayd", "sogsxu", "fzylgp", "kotukif",
+                "pwfjx", "vnecbvd", "zgojjum", "byuzv", "lxwfio", "enqpgs", "lguax", "ztfnyqt", "bbbbrq", "bfqcd",
+                "poalx", "amyfb", "rmuyan", "anqopg", "rovev", "pafiqmd", "uxjiaaz", "kyskun", "kdyzd", "dnvyel",
+                "ljwmn", "nosgpxo", "wplvwil", "orcwe", "xhyuj", "ogueh", "taovv", "zodzsc", "rdiut", "fiyny", "qmwccp",
+                "oqgpqv", "ipsmwz", "rvnanf", "vhjcem", "hevsn", "sxdsmg", "zxerju", "qqmvrn", "jpqzy", "yenlp",
+                "nmitc", "bakwo", "ixmrhxx", "faypb", "bbzsmgw", "opulvn", "qnugsr", "kpidsbl", "dukzjpq", "bbybu",
+                "wjausnl", "jmzkjv", "uygdm", "sejdzga", "fxkyhn", "xwgvw", "oxxzvlr", "kowjho", "ipwkmjc", "fjrxk",
+                "rrzkdgs", "bxghaq", "gbhoqa", "xnaprd", "vrjus", "prpqp", "zayukll", "ieaarp", "xfcozp", "yofdlo",
+                "vquhofn", "prlictl", "akseu", "fqlybv", "crpvuzw", "bsvzr", "mwdcfdr", "dhcmcu", "hiocm", "xivqrr",
+                "yvcmo", "svwsfr", "uwopkxy", "ougre", "yfpmzlw", "ycsbch", "wlrdnre", "jrdhn", "ssjkca", "tndje",
+                "nzebm", "ozyobeo", "puerg", "aaeqauo", "gswil", "iwcxgji", "tauimn", "kbpdwlk", "vltzl", "watqld",
+                "ghqrm", "pkravau", "mjfbxv", "bzifdx", "ufszjkr", "xodqa", "vopisyg", "ppytrz", "ioqlech", "ixvtpg",
+                "sgpeoa", "avsvj", "iwobycm", "ycnvobh", "lnexix", "fgogr", "atdwdil", "vcsbk", "iopjwyx", "moxoyua",
+                "vncee", "cfqiwxh", "ttbkbh", "xearpw", "jzfsl", "shpxr", "wyrrbm", "imrjybd", "adufra", "msedvi",
+                "hgfyd", "yofpdh", "zjwycb", "dcleww", "ruacjb", "yjwelwi", "dagoiud", "vavunu", "xlxbcmc", "urqksfd",
+                "tngbww", "kwjhnl", "gekdht", "jlkzfgv", "lexqhx", "cnmynkc", "ebenz", "rwdopf", "wnetkj", "mcfbo",
+                "gtevzv", "odvil", "shkifu", "aovbq", "vibnyno", "tcmlmkz", "rfpgk", "gohtjwc", "mwmfeq", "wzxmz",
+                "jyufim", "bniivjc", "mozrlzt", "rcwje", "nykfvh", "ezglkh", "nqkpvj", "tyqwypw", "udzlzyz", "iixxey",
+                "dlyaq", "ugksuyk", "sxaco", "tkpokn", "ykglu", "uwzorpp", "fhuxz", "dqfyv", "xnlgoe", "bpohjte",
+                "smlty", "vhght", "nmreqxa", "reouy", "abqju", "ramtsu", "ektbvhz", "ercmpc", "opchcx", "ajhrj",
+                "hkvalb", "ucngyjf", "zoltae", "ryjhfiv", "lgjscrc", "mnbkms", "odbjs", "ywbvys", "jjcvh", "vzkojje",
+                "ttohufl", "gvnoaj", "jkyhavl", "czsbrxu", "lhhrdn", "nhmuatv", "eityul", "aabelb", "limct", "oooxwis",
+                "tmvxpv", "xbeiqh", "fcwcc", "qjhdcq", "wbyplq", "zftnk", "epcdy", "kptee", "qipzud", "viytsl",
+                "bzhwvj", "pmkpud", "aqpunv", "jsxetb", "gxeljex", "iaebpo", "dihzj", "zftby", "vkzra", "hejaidb",
+                "djvtqt", "vazqo", "iugtsp", "lxvtoin", "kwyxpwj", "ehpnrp", "iivjvkn", "vdhwfj", "afyavpl", "yoiht",
+                "colenpr", "iohrx", "khuljuj", "iwtjh", "gnqncp", "vdhwm", "yhxfw", "rsrig", "qpgym", "gbalr", "gqhdmz",
+                "cxsimhf", "muonsb", "swfwyyi", "ihnnk", "hrzoc", "uixhtym", "rjjtpn", "efzgwq", "rubgndx", "rffpmk",
+                "rllab", "cyrfk", "ssvoz", "ttzhop", "zhywy", "utzix", "oklvooj", "kdslj", "qjohyod", "ulnqss", "dppso",
+                "xhyjlff", "elazc", "qdimsq", "ozzaprn", "pusmfw", "vqopa", "fguvxwd", "luerv", "ylgvs", "qixlgz",
+                "btwyq", "exxthjr", "gmcmk", "vdovgma", "uxaqwjn", "rzdlo", "yjknn", "yrxygac", "vocejbl", "wnfki",
+                "aabtp", "aohxnt", "evgftbl", "ppsraw", "xwjin", "bryhke", "mhwlj", "rnnfh", "vfmsxq", "znxzwm",
+                "yilmhgj", "gqdvp", "lnuln", "ltjtpt", "fhrhkcw", "dvsalfh", "soytv", "kexst", "sjblwo", "wiblqa",
+                "hzikex", "cqjlf",
+            },
+            .e=13964,
+
+        },
+        {
+            .inputs={
+                "gtgwzg", "bgmwmrk", "nqslwdi", "nwsfvi", "ixfez", "muovikm", "cfxptlx", "nffdyw", "zrmtvv", "odmhe",
+                "btupmf", "sjfmx", "pytwab", "kznqxp", "jngry", "ppivkj", "bwwmqpq", "lxbnu", "altks", "motdd", "jimgy",
+                "lppjek", "kbanc", "lxtgvb", "uqvvek", "ntpxnyn", "qlrdcx", "xcmgzwt", "gtcapjg", "sntqu", "tkfwow",
+                "xqbja", "fyqbiw", "ruawk", "frjdyp", "txknwrh", "kzyjg", "bttxz", "lgntv", "ewfxgz", "lchzsg", "yqfoa",
+                "zhsbm", "htxcg", "qjqkxou", "gkcxv", "lhsjs", "igrtnjv", "ifuecww", "slzcs", "yceue", "retyxs",
+                "klybm", "jbxjv", "erhosw", "bjhjpjr", "nvwkcq", "mezursm", "ykbvin", "xzlij", "uiopt", "zyuxddz",
+                "rmfhp", "xfltr", "csluqps", "gzuvj", "oyqyjy", "lgjuw", "hytegp", "gkoxj", "boirzbg", "dsqre",
+                "gxrgabo", "jdlab", "kchijrb", "kuozwmp", "vrjqov", "hfmehfl", "xkonfn", "yfhkp", "ocota", "akfao",
+                "qllffp", "etrpndt", "nrnmeh", "kaemhl", "diqeja", "wxclkjl", "bggfny", "krvmmx", "wofbj", "dliqwvn",
+                "fcihtkt", "fonqx", "irawity", "kkmlx", "gjmshvq", "llcov", "vyqbaz", "ypprher", "erzcn", "zdzmj",
+                "secthxg", "dnyxtvn", "ivqrk", "xzstj", "tvmepa", "rweifqm", "tjvoeme", "lquuq", "xeulv", "gxmyfrx",
+                "ahltke", "hgbgr", "gtddmv", "dbrol", "tmqlk", "bmfaok", "iqojj", "zowni", "gwkvkgs", "mtoxm",
+                "wyinnug", "kfotoix", "duymz", "keywrvl", "mukloly", "lfcycan", "illypju", "jfmlw", "atmaai", "lcsrk",
+                "aarsej", "gylent", "cvoorpa", "awpczi", "vsrerd", "gngvhu", "fhwkc", "wsvftqb", "yevwb", "vgcpwb",
+                "zymvkkh", "bziergz", "regjz", "ajhdn", "bgqwre", "kqfqax", "cjyly", "vinwbe", "ymkbtst", "oavwn",
+                "onjzg", "qssxa", "eiakw", "zpcke", "ifgotsq", "adjdprf", "ilbtt", "vcjgw", "zzbjnin", "nztco",
+                "dbyruh", "nvsvk", "jgits", "erzqz", "leqns", "twrrlp", "rqymf", "vmzijn", "kegnmyk", "oqbmcg", "otzae",
+                "wtnls", "gstgfvy", "pqcjlui", "mxuitc", "tthpkeo", "ilhfm", "mganq", "akfti", "savwla", "jknboxy",
+                "gizapl", "kkogrl", "bxflyea", "djeqc", "trypds", "ifowgv", "wojnr", "zqtpjh", "hirqg", "bfssfo",
+                "wklsjey", "flvmqe", "lccbypw", "vatqhl", "exoqnda", "timli", "dfqsw", "vpqofqw", "wkqmuw", "jjrak",
+                "ehqkwsc", "aszlpxn", "pcljgad", "oulhg", "miuirt", "fnpbpb", "slgcj", "sobzp", "qjjaaz", "xyzqeyp",
+                "hxcdwyz", "zoxfyc", "dpjezj", "nhlbk", "wjgbvxc", "vskzyvm", "yjknun", "magigau", "qdyztsp", "tzauro",
+                "cyafd", "tueqrk", "vbsndz", "oenku", "onyxixo", "cznrfu", "vylwwl", "cjquqf", "dtvjbs", "hrbax",
+                "vtfkhsv", "kgunkh", "gzoralk", "rrnyslz", "ynqxm", "cpgky", "xhasqk", "mobfn", "qzumziz", "gttim",
+                "cfvghnl", "bqlna", "saaaoa", "bdejifh", "uwddhyf", "ucqde", "yahxi", "ghjytm", "pfdtj", "ncqyqz",
+                "bwplqpm", "jmdprp", "wjzuh", "oyvsn", "uxlqcco", "rgxzul", "mzhgvih", "iauvz", "zpygy", "mptoxu",
+                "veektwe", "ulaietf", "bqcymhk", "hibij", "fzcoy", "ksrdhev", "auvxxqg", "bkqvrj", "egkcxj", "vdczklu",
+                "wopnw", "wtfxx", "zdryst", "yfxyi", "hdezi", "cwsoiof", "gwfuqg", "wikkxzu", "vakgw", "jtoqr",
+                "qzrzgo", "ovqtjk", "fvouhbd", "iunwj", "aafavex", "wwaisl", "idcyou", "pmbbjxw", "icjufh", "rjzog",
+                "exhvn", "dypdbhr", "crvpii", "uylzlrp", "sutckm", "sxakybe", "kxhlcve", "xnnbz", "xrvwgj", "tfzqzz",
+                "mzknfo", "anlfzcr", "lwsdak", "eqjgkk", "njdqzuw", "bvbrtx", "jozfbs", "zenxg", "rkpaoft", "aeztwv",
+                "zdftrrx", "uurpcsk", "qdxkz", "ijjuxiv", "excyqo", "qqvbfz", "aywtfnl", "zpmfprc", "rydfsn", "nvfohp",
+                "mvbjpx", "jpbkjef", "ogwhp", "ubaxvg", "ofrqfy", "zyhvyo", "wlakxaa", "tnzyk", "saapyr", "tcmpeb",
+                "etnyaq", "lrgsq", "mzpbs", "fkczm", "xxdgd", "lkibi", "gthxdj", "dgzld", "tnunjn", "hzzepd", "qhmoci",
+                "dskxgx", "jfyyrzg", "hanzy", "pzier", "thxkmx", "fktcrf", "ymdjvmf", "hgzhek", "qcelftn", "yoget",
+                "hsadqp", "ydiip", "lkhztjr", "pjkfbi", "wskxv", "qezzdtk", "zereg", "lcqvjym", "epdlycj", "lqfnau",
+                "njehxn", "srafi", "dhfwu", "wztjr", "ucwgnqv", "wigdg", "jkzcglz", "oxxjx", "yqvlodf", "mmaltkd",
+                "fqahe", "nfdef", "urxct", "hzhardk", "ugvufrl", "qoraj", "itsymq", "dxvbn", "hvgmwb", "vyoab", "wqexj",
+                "rzimt", "aejilm", "fbetztv", "gzktuf", "yxhursl", "uxluoui", "vlhpj", "cazppiu", "skibpc", "iaawl",
+                "bgpqqjw", "haworva", "dkdzrd", "oertq", "prphs", "pwoikd", "jzxtju", "lukslx", "mwzgsa", "zbmymir",
+                "aarvrk", "vcnarwb", "yvbae", "mblgdx", "wpknz", "ftdowg", "ogayhz", "qmemfr", "ldqbre", "oexhbh",
+                "pndmji", "lmmhxnb", "ecmutw", "zsblbn", "aimqqnz", "ubsft", "xzagmrb", "lswjdx", "glevzy", "kmkzoec",
+                "kimrwg", "akote", "uovrxi", "kfocof", "sikiqtk", "iyjyf", "pkpsqu", "otsxxoe", "eoxyld", "snljhud",
+                "ryuqnn", "osadi", "teqsj", "ulvrij", "kfjcz", "wvfqwon", "zkisf", "zanaxlm", "zzgegc", "dvcpuj",
+                "qdgcjg", "ziwqwr", "enxcv", "cecwvep", "tqoctkw", "zwoau", "opkglae", "olpvlts", "zdtrcl", "klrvh",
+                "obrqs", "iwykadf", "vvugv", "sxskcjo", "vhyeg", "ydbaeb", "tzgplyf", "bwhyp", "uwombi", "svkodw",
+                "otszu", "bkyqfup", "rojnt", "bauroa", "bcribk", "ctihaog", "xktdiel", "hkvctki", "wheih", "ylhxy",
+                "wgosp", "bvgtk", "xpclcti", "uktyodd", "gfblo", "toaur", "cxdvo", "qezdwdb", "mdvdk", "zyhbs",
+                "akbydkw", "wejgqnr", "qifti", "kxalog", "nklzot", "fgoas", "apeymfw", "mdjgo", "xifpo", "hfouhi",
+                "mdyyzf", "xacds", "zuijqyd", "hdhsop", "ivgfg", "uarodof", "lyqlzmc", "vcyqwnj", "uiekded", "uosqq",
+                "quajnw", "adkri", "lxsbi", "porjvx", "awnkf", "sotppb", "sfhorj", "uuocxz", "vstcick", "gqvzobl",
+                "rkccef", "rlihmff", "lazuav", "iyahmv", "jmuplkb", "oforwx", "ogeheqd", "qpayb", "txetvjv", "uxsgsrj",
+                "procbt", "ehlkp", "vdtyz", "eqjyvll", "tkwrwud", "qivrv", "abkkllr", "khpzqpp", "cvlhohv", "nvzbx",
+                "svvtji", "wmyveiu", "jrogfr", "zpphtie", "faoamt", "ksektw", "ujlilq", "ufuax", "mqjla", "fqrnf",
+                "xcdaet", "kfqknho", "ofvdjn", "kxopf", "yysdl", "dgronv", "goknbep", "lyhuswu", "cqmvhx", "hoitpoi",
+                "dgzqll", "hpyea", "xfzohrg", "ziyod", "jxkki", "vbyoxz", "ouylxxr", "mggezan", "shxvven", "yrqnj",
+                "tzdyik", "syeaa", "fthdjm", "zjzvdse", "jxzdjdx", "ipxpb", "ollgnbu", "jcdjyxj", "bqltawp", "lhxyv",
+                "dvggabj", "ahcuqje", "lnrtyaz", "kubtfl", "rjetqbx", "fogbvq", "tcwhba", "ksxusyg", "qlemv", "dsjnth",
+                "zdmmncv", "sdrzpfk", "yyocl", "vtqst", "bobtwdu", "ivifxf", "uaxwlo", "piqiigo", "pifql", "tdhuue",
+                "lrmdb", "peetwl", "lvwpwji", "dcibnrm", "ppamuxo", "pknto", "cbiova", "wdhekr", "kgipdgd", "jlpvi",
+                "zoptbb", "yxeamj", "pjnac", "tpdprx", "bltdktt", "wtisu", "cezsmz", "bbbqxk", "hnyweo", "jsuuu",
+                "bykgghi", "spulymw", "bynqe", "accaq", "lghcqe", "nqygqvx", "lfvkqbw", "duzud", "agmnlw", "gqhqc",
+                "xkgie", "fumakny", "momon", "scubukr", "xrtmoe", "ywnbn", "wdkbdzv", "wyflbp", "vyaeb", "wwzzper",
+                "veghzzz", "fdkrof", "bkjtao", "tbvpcis", "ftzghcq", "yjsfg", "ngdkr", "pllzc", "rgviwsm", "mydqr",
+                "ilcjq", "kmoryr", "ocnwqw", "zxggamr", "kjlasr", "idjbkt", "bjvple", "oauzpzw", "gsxjp", "sehbaf",
+                "uubptgp", "ebhaa", "ximeurd", "kqewx", "mmcaiba", "lzpqva", "viexed", "zbcocmi", "nxnuzv", "vyawhnk",
+                "rozmsws", "oqbubyy", "lbvegpt", "xfxct", "jifzdqm", "bmnjwmc", "ptxcqc", "ovzsxog", "ylomlt", "quoic",
+                "tlyjmyb", "fgxpcf", "wyhyzyb", "zngau", "zgsef", "phsinbl", "kgybiqo", "tvpsi", "cuxnlt", "hqrrs",
+                "spkjg", "kstnc", "grcrons", "lmbjo", "mypsfq", "scwir", "ypngb", "rwqksn", "ehjufq", "yulvm", "vyqrmg",
+                "luyto", "ueiqm", "tcgcqrg", "yknwn", "szrbbtv", "wupfh", "vwrmiq", "msleyih", "iqtae", "ezykx",
+                "ilewp", "hcttjul", "esiianh", "wkuuv", "jszkrx", "gumys", "lketi", "zvpsb", "xsvlhst", "myywl",
+                "svexdk", "biwsh", "kpbjcdf", "cyiwl", "ilhfm", "rvqbly", "ukowa", "gkmul", "krtcmi", "vwszj",
+                "nxwipbr", "fsycct", "jeglcq", "donvsld", "bdckkdr", "iemljm", "gfpgc", "qilgqhx", "ounvam", "qyomyt",
+                "zklqshf", "bpauei", "kenzs", "ytgaq", "nnepek", "tniqq", "swlbj", "ibdkeo", "oxoed", "scvcrs",
+                "jbitcfz", "fjnrwjl", "jogkl", "pmeyrjc", "kahnos", "wozbzk", "ytdav", "pcley", "kjxsvub", "jfyxt",
+                "xkttisb", "rvdhbpc", "vvbwnmi", "cecnlb", "jjqemu", "iasnf", "usrtyx", "vtastv", "gcbwnft", "qsiqvo",
+                "rfbua", "utaxsxl", "msrkymm", "hjuppov", "jmhmcsc", "pdiujj", "eafuzlc", "srjvh", "kzrubm", "fkgzdj",
+                "kjptq", "zrcid", "xiuqod", "nvfjea", "ioeod", "wncxt", "avbhjud", "qkxrl", "rbmhfcq", "shyvqbu",
+                "ffcmv", "omfeko", "ucibm", "lexpw", "rjuqey", "qohfd", "fjgzi", "mlozc", "rstgl", "ntkraqo", "paykcw",
+                "iaajb", "adpem", "gkgjbnj", "yxbuvg", "fqkxt", "jmyqte", "uzeqyj", "rumyxor", "gkfzleq", "dwngr",
+                "thtqdtr", "yptnz", "xoadll", "psvhyce", "geoso", "lijtbu", "amkbuby", "gfpyw", "plkso", "owdmtvh",
+                "fkxad", "keqdrz", "irxjure", "gfwepm", "wyxiom", "pyedlj", "mfszmv", "tkjiofn", "epjdigv", "jjnuh",
+                "mtxks", "nvfts", "xtqhc", "xttlu", "sasra", "qfumac", "rwfavex", "rcwstl", "cfzmi", "htvxrs",
+                "nokfsvv", "tbvtckp", "wsikt", "tyvwtw", "hyvzd", "edflcy", "wduqbbl", "xacrrb", "sfbzq", "adhhyy",
+                "tltmppb", "imjooie", "joizol", "rbzhgs", "rcldg", "ikspo", "sxouwi", "llemmdb", "nkkfie", "uadfas",
+                "rigylga", "mbnhs", "vwtsnh", "uiskft", "ppvhyr", "znaenz", "lbjldsk", "sizcja", "dzvlem", "iedleqf",
+                "zhxzaqt", "zyeen", "ijdohjj", "dvycit", "nfqyxoc", "xgspmx", "gticsq", "tvodn", "zpvtu", "yvevn",
+                "bugvglx", "pprlwl", "wikandw", "fmkqpzp", "sjfnjlf", "yswptd", "aeuqf", "ihynsy", "fnlrtb", "haewxo",
+                "fvnzrx", "mudxoc", "vtdpd", "zuldtvj", "kerpq", "xeesgr", "enhkpmo", "bhhlngf", "vcqrcr", "drflmq",
+                "dufvzsz", "fuouj", "bqcyqr", "tsiyu", "lrpnmx", "hfqhwz", "irfjh", "fikhwz", "qxptzm", "jzppff",
+                "asutke", "byouz", "amqbvx", "jgsfh", "obdvlb", "sfcdx", "ofkxo", "asamcnd", "caxpnb", "qjaqpy",
+                "zbtsmeu", "atzzwkl", "ebkpov", "gxuyje", "ybgbdd", "jqaca", "wnrqyt", "omxxneb", "xerpzsl", "iadesn",
+                "mtbdwj", "qftiu", "fpeuu", "pipsu", "koxnbn", "ztult", "uguldn", "aceqlji", "uasdjf", "tcydz",
+                "gswhdlg", "rieim", "ojplv", "tjmavcp", "tfbcvlh", "uutoacm", "ihsixk", "qwvagbe", "nxizc", "zvwfvk",
+                "cdsyeb", "hambpgs", "hpsndyh", "gwjoyw", "ocqpmcm", "xrbmn", "grmefy", "wwoxg", "tyvgc", "voeqrnu",
+                "rwnsj", "cnmnz", "dxltx", "xnybz", "jslwhka", "dremxm", "gfcba", "fijeyqo", "kxzpxyg", "idjbzud",
+                "rfndjd", "gqyslh", "wpoznf", "cbzma", "dnvfyh", "spguxoa", "bhjhe", "pehce", "vwanott", "giwquq",
+                "vhvwh", "krukn", "xojkq", "mpdfbk", "evlzdsw", "mlbytl", "dzeeupj", "pfyyieu", "khbxqla", "pjfdf",
+                "ouvrzs", "liyksgg", "aimlb", "jujhbu", "qtxebe", "nermn", "itsnf", "whpetav", "pnjfufk", "xeutgz",
+                "sbzev", "vimqnd", "dmagho", "qfwlrsd", "dnchdg", "ykmrpua", "fwlim", "mxxhdrc", "uewuwtk", "cubiq",
+                "lrrot", "ntfzl", "epluzj", "lqxnwo", "cehhmlm", "ntewnl", "mqlxmr", "yifbwx", "srvzoge", "ocorz",
+                "nahzh", "eyxyrv", "ygtxiq", "lznyt", "kntje", "qztqnwk", "zcuogu", "jvvqgir", "cgknqi", "jzdcl",
+                "kbcnli", "ofavaz", "govvnq", "chmuflw", "vxkxu", "lgzbgu", "oaeleyg", "wbjjdiq", "rxzei", "orhgon",
+                "swmrkye", "lfecfum", "zrwygt", "dnsly", "wayaxe", "idvhdd", "nzlrr", "qinomxp", "zqexfqg", "cgirjzp",
+                "cxyrqt", "jledfgr", "xstkbu", "lsazo", "vqlam", "bwdacez", "mpyxys", "mjljmde", "hztog", "tjubtlz",
+                "vhhhn", "ssercal", "xthbxt", "icyiu", "iljzz", "zhnjfm", "cktcwjh", "qetdt", "gdeenr", "lcktgy",
+                "wzwoug", "mefjve", "fryrl", "fefwp", "dzvow", "ytomt", "wglib", "komqcu", "wztnrs", "gestvx",
+                "hquwilc", "mxfzqf", "svhwm", "viymyf", "uolmu", "uirzdao", "iyprm", "uxjnyzd", "rcwczh", "qofsqkz",
+                "oefie", "gmtgrn", "krrfs", "bfhsdnq", "cowzu", "fgrjjz", "xtpdn", "wiepso", "slgjrjd", "inlimj",
+                "nscgl", "vvnby", "kxckw", "gllbjjp", "juvui", "kbzjd", "odhqpx", "pnpkvf", "fuleic", "inawlx",
+                "essdsdj", "fvlud", "ttvjwz", "cnkmtdy", "xlchd", "isqhk", "vmilcks", "xoifyy", "bkygwh", "mgzdpre",
+                "waemqvd", "ricio", "wycuo", "bqzkd", "pjazcp", "kqviffk", "ojfvq", "unlbnfb", "detmfih", "nytprpm",
+                "fevnwin", "iydfpqc", "pkhlbi", "aetnje", "pzojli", "basba", "xutuv", "akncyfb", "nsiwt", "shovlwd",
+                "qyayx", "mzjcre", "xadyr", "dxpxj", "mlcpp", "zzyaht", "vwqhyeq", "dwmla", "oizmbr", "egwzibj",
+                "rfbmu", "fuzhg", "ynlbutf", "yycgtro", "humfhb", "lrkkga", "xglbsoe", "mvrdb", "fvxjbw", "lomacg",
+                "fmfmal", "qykti", "oujsp", "nohogca", "dbyvxbi", "eawic", "qfzwp", "xrzbec", "rrqyw", "mtbhs", "hbrnv",
+                "fnmeikj", "mwogm", "ovxyvn", "cvkqxcr", "xfnobdy", "pkity", "rbgtuwh", "odjnv", "zksyrl", "rzuceuk",
+                "qukxs", "ipznvtc", "bsvzooz", "nzbpb", "xpiiir", "chkqepj", "wzwzzcw", "rhptep", "yjccu", "avijaiv",
+                "kxpms", "ovwqsgo", "jjqvi", "wyrxpu", "kybsyhw", "kvyaj", "dnusp", "irgrjyj", "wpeico", "psgnk",
+                "joevw", "pfyqwr", "sxlmcs", "ibblhvx", "aecsjes", "tuqnfd", "avemo", "fvijtdb", "zcehesf", "yowvgv",
+                "fnrgd", "jpvkykx", "ekyho", "abtxc", "hptqmiy", "duwef", "bdsac", "mgamp", "wtsto", "efxhwad",
+                "yhjwfe", "adnhhh", "ouykgrh", "sbtpmr", "fzkps", "mdilvvn", "ztvysu", "rafkn", "ledgijl", "ewlnpsr",
+                "cedlekw", "gngcu", "phbqtb", "znfjwqk", "wrqkv", "tayvdd", "cceqg", "dabgyh", "wgutqn", "klseoo",
+                "kaktas", "einjkvf", "gzmbvur", "plcskol", "vhpzaqz", "gcezm", "giavzjt", "prrai", "szrtye", "lbegl",
+                "jkkunm", "ociydiw", "kstxl", "bqxhkzh", "jzzjv", "vbjzopr", "jvdkro", "padxe", "pmezf", "eqwlb",
+                "nupajjp", "bkunbit", "xjqxtr", "wzuqmc", "dqozgi", "diqfj", "eqlfngp", "gvnggid", "znylx", "jajie",
+                "qmsamw", "mttvg", "gzamj", "cscnb", "bvtreg", "qhbiq", "eklkjp", "fbcyl", "rdjsfqf", "qevuv", "jwislw",
+                "unjvd", "fsbvb", "wqcrho", "orrylro", "zoxokla", "dgoja", "rgwja", "vqpzfh", "llhtc", "afoic",
+                "arscma", "qfwfli", "ivcncxd", "ximts", "kwfebh", "wffmri", "ljace", "eonkn", "ueapcli", "qmocdvr",
+                "mdviccj", "vwvyl", "savupw", "fanliyh", "ykwvsh", "yzqez", "vdxepxm", "soocy", "jqczsb", "ckufr",
+                "gyusijy", "sbdvh", "hgbqt", "zrcka", "mhfhy", "shksov", "pfliju", "xlesen", "rgqiz", "mnajzkt",
+                "iozcs", "hqikmbq", "ervfyim", "ezddw", "kgklyaw", "sfmqe", "lnaexsi", "llvvt", "bhiwu", "riigy",
+                "gtdxlh", "vpkoeau", "apapx", "ebpwll", "pkhqe", "erulwb", "ljxkn", "zhcgls", "ejvxh", "fwlsjmq",
+                "yrrykh", "stcxaw", "tgpbny", "grvkdk", "svuzxpf", "jwsmwcm", "kayffuh", "xnaisep", "qigyx", "dxnje",
+                "nplwles", "qqomb", "xrnrvr", "qmqxr", "datvf", "vllggut", "cadczx", "nknpbhk", "izowycz", "pekxqfk",
+                "unbrsm", "mcjown", "kaqiw", "obrurt", "dmwqli", "atjrc", "oqmlell", "wymlr", "xjpkztx", "wjyhkna",
+                "otqju", "hblgv", "lxrbs", "gyfwu", "vdpmt", "kjmdibo", "ozapzmw", "jwcgtq", "dfymo", "qagvqil",
+                "hittrny", "uinvmlm", "tehfpsl", "vpqnzqy", "sroki", "inxetz", "isnmony", "nzmvf", "dzufni", "nexqh",
+                "fkjnvma", "gwvst", "idhwax", "neeuvln", "iecja", "zwzdp", "vfppg", "obbei", "dfgopn", "acijhp",
+                "ixwtkp", "fpyny", "rzozlxq", "djuov", "hhfjcl", "kcnfa", "grguw", "dduiej", "rewvs", "imlwk",
+                "fosbbtq", "xjclkjn", "wwpqgb", "jovsfes", "mhiaeuj", "fxjgk", "enngxv", "skiaud", "whfkr", "igchqb",
+                "kftala", "dwjxl", "xepvk", "qidfjb", "titaly", "jplijvv", "nuzcon", "slleg", "tyycth", "dtvrvpd",
+                "yubfqoi", "pkwsff", "zbbko", "nrggf", "hqgnna", "yfumb", "qubvic", "qjpwo", "vmepg", "btawj", "zveot",
+                "xaivzxu", "tknsmv", "fgbvza", "fnsnqs", "qbismc", "arhyycq", "evvxs", "xpkees", "nuumqyd", "yzqdh",
+                "oeeuxh", "vmjcm", "lkvgv", "mpxrugr", "tkxnx", "cpafxvh", "wrswmb", "eadznj", "bdvgwz", "ahiegu",
+                "shedlup", "sejcyww", "zbusii", "lzdzak", "oymze", "vhbrz", "digdz", "xphzgg", "levzi", "tgkvqp",
+                "kmxcnm", "bnwlngx", "iejarx", "dizrscz", "vsyqnv", "zkuoye", "beojpk", "hfhvzg", "gisjftm", "dvweqa",
+                "keauzic", "lkjby", "ngguexc", "pohngye", "afjtde", "xhddc", "hhttmgi", "caczjl", "wgkfbv", "ulvax",
+                "uemxgxs", "uqfzxu", "keaaw", "pdxhn", "waoly", "ukvfwy", "pentckg", "bgypmd", "ozywxef", "kxbyg",
+                "ituij", "yssywlv", "iybzdz", "knpyeub", "sbkrdlh", "hsqvas", "wrjiuyo", "pgogqmv", "ofsoix", "dxldl",
+                "ezhgfxg", "igpkh", "bobmm", "gddpayx", "ejihwu", "evxddr", "wdlcpqn", "zlucrvj", "lciroeu", "tozwakg",
+                "ymrlcji", "cpupkp", "oqjaa", "ikerp", "eghad", "tntbl", "giqxr", "szavqhz", "acqawb", "hdfytnu",
+                "qoksmwl", "snnplu", "drvhr", "uyjef", "kjlpxcr", "wivxg", "jemkix", "mlhcmd", "vlivttu", "georzc",
+                "vagamm", "gndipgf", "cmvsbmv", "pbfyvz", "pgwye", "qyxpvs", "grjadvo", "vgfev", "kpfloyz", "lchpqln",
+                "eejfkcs", "vlkrhp", "ppfukr", "pgrjbg", "wogtj", "cgivop", "jnpqoj", "ldlpbrr", "vlgal", "kbjar",
+                "dngqm", "ikgadp", "jipvwuq", "xqvjkl", "ojtecxz", "updfcm", "xwbhr", "qhupf", "yuiat", "jhpfebe",
+                "vnrrunw", "eunefe", "kzcbqd", "fvxufv", "koynws", "dgyfwb", "nyvekrk", "rjuotpr", "ymdwzj", "dnkmrlt",
+                "abykta", "ubmbjdy", "pvarsmz", "ttnvs", "jqhejm", "zvrek", "edhxibz", "qexny", "oagswer", "twtur",
+                "fmcbl", "qmdma", "zthlqwv", "bhwps", "czqgr", "gqbrrxx", "nkvgzrs", "cazmrjq", "nieyb", "bgsgq",
+                "ukfakiz", "yztyra", "tyfrigv", "wlfhd", "rbyunj", "usvypgo", "hhkej", "jivtlg", "ifgzqu", "ofjrlw",
+                "rlqyxnm", "smljy", "mbgwv", "fwlehwb", "qlogyx", "faxwc", "axaeo", "hkgsppo", "dencdr", "ddhbps",
+                "jbxxoc", "pjxyk", "ctvqy", "qvvpzyu", "yewduf", "mugmbte", "lzfqvuc", "vhxpg", "jnmqj", "ennlwu",
+                "qmjhiqg", "adierw", "goezh", "vjnoz", "rqagh", "emtspp", "nmmhe", "ssomw", "ofkwv", "ludzh", "otpfssv",
+                "snwjzz", "ahimcsq", "tgoxkeg", "shnsfau", "cmcdlym", "ybnft", "kcoyn", "bonazcf", "gufvm", "tpmlzom",
+                "eyzmod", "dokojaj", "xadbjwk", "ffvle", "ntteh", "jevrazt", "efkhc", "bbwntl", "srihk", "kmjadz",
+                "qkxsvbq", "ddljp", "uwwuvth", "bipgo", "ihsmv", "xmmmcsj", "odmqr", "fttvlys", "shehiuy", "icgwi",
+                "nsvmg", "zqjjkyk", "umrie", "spbqz", "xmidgzv", "yadhc", "mspibhn", "xtgxom", "rasfnft", "blerfgx",
+                "zfpfq", "xkfclje", "tbzvw", "vgbvg", "ayngxcp", "ndyle", "vqbgsce", "fpshlx", "vqufvgv", "dkyccvy",
+                "yyuyjf", "rfxmqdn", "sxugzm", "gjhbkv", "xhdjvx", "ymykgxb", "prknrk", "eabbpqr", "qxojf", "lzwhuby",
+                "cpozcue", "ishbwlf", "mduhyjx", "rrhhav", "ufbafzp", "mfpwuww", "pobnaaj", "lrsxxj", "cohjf", "jkbxz",
+                "sarme", "grklhj", "tqvkqy", "ytikna", "asntarp", "gslbu", "exorbu", "cjkwzu", "psdma", "zzpdol",
+                "dvgloav", "yxbfakk", "emmcvx", "jlguic", "jjxkfmt", "iuendwj", "rathmt", "qyweiba", "xafoy", "dqsnc",
+                "hvkowm", "eabcao", "phydpb", "rndnfwg", "qjahwwx", "ytpal", "htmau", "dopybqz", "nvjif", "vwwqi",
+                "qermpq", "iizvetj", "xqfos", "rtcuhbe", "igjrfme", "ubxbb", "qppcb", "nohfxao", "nfyncug", "ddzhw",
+                "froajrf", "sjjiss", "kqitq", "unzlbaj", "sbdaepv", "tvmhcga", "kqhgtom", "vamfzf", "gyofhng", "mabbme",
+                "zdchndq", "zybctyd", "psqbrzl", "hyxfsrj", "xtgkdh", "ptwqat", "uucrov", "igljkfu", "pktoiui", "nhyil",
+                "cshte", "pfsqa", "nsfsmze", "twcuf", "jfqwtd", "vinzb", "afruk", "txldlnj", "jsttu", "pkbczjm",
+                "txpfq", "xbhwtcg", "cmcho", "jtuixpl", "xfefj", "oapaczq", "xcpvsw", "qbudm", "xdvtr", "hwkmj",
+                "zagtjpd", "ohnawr", "flxbat", "epicea", "xmjnmbw", "ywvfcz", "rvyel", "nsuwwuz", "kknoqq", "mhsfiz",
+                "hnromvi", "dedzukf", "uldavy", "pdcec", "qojqpmf", "sivfru", "xjayrn", "xwjuah", "vkqmb", "wuvkxpc",
+                "nrhsb", "hashdly", "oeudry", "foqpt", "sdexar", "nuyli", "smxpkk", "mjheihb", "zmxlu", "ouiisf",
+                "gmhjbb", "zozpja", "diimrrm", "uwonbw", "pegxoxf", "obdtpcn", "fdadto", "aekkg", "fjjxmeu", "dkqpptm",
+                "wbfuzr", "lfteh", "rbtfbzo", "eglch", "qxrru", "oofwkgz", "rgigqr", "gnjpoep", "uexcxs", "mwfgk",
+                "embebip", "suans", "oagqbqx", "plyzcsq", "huggwzw", "ccsxy", "waixkjw", "doqwr", "uqxkvkc", "yurkj",
+                "slgbj", "mbqzm", "yssszr", "htoph", "gupqhgj", "kkrsdv", "uiuxfp", "qxacm", "uwmqc", "jbnzh",
+                "sqyalww", "kcjsmx", "lonsz", "pzsmu", "cjqvjw", "qiiulzm", "wfoqt", "kdjnfe", "dsnpjn", "xnzmimc",
+                "ulvdd", "fvxpmm", "rzklco", "whyolla", "ppmex", "bgaoi", "vskeguj", "kjwbh", "wzskso", "lnpkvie",
+                "lcxsnc", "ddwpwc", "hezxemz", "tcgkj", "yawyd", "oymed", "ukqrx", "zfwmo", "ifswz", "mzjuo", "cafpb",
+                "kubdbe", "owkux", "rhrvb", "usaev", "pkffvsn", "uindrki", "xeemo", "qumuu", "pldri", "ghusk",
+                "xkzsrym", "mndqb", "fpvokz", "kfmeg", "lrhmj", "refbzvk", "qlbrmp", "ddjuaj", "foyet", "qtdujqj",
+                "uwvhxsj", "xtmtkiz", "xpwvh", "fcgll", "dlnwmj", "rmfnoz", "pomnxn", "vhjcyi", "totup", "udgpv",
+                "axpaddc", "qtzmga", "hoszek", "smsmmvg", "qoyvj", "vxqigxy", "pvwynx", "puxjpjv", "odcaxeo", "daeuw",
+                "cdugp", "sgwgjdx", "buhfyf", "yiwykai", "ojtfyal", "tjaob", "oimmn", "bdtnidq", "zhysw", "bojjkf",
+                "wkgqrd", "njecfik", "cnndzrq", "dsiaa", "kumtk", "towbx", "bzoirpz", "vtnxby", "plhdj", "rqpai",
+                "ztaousd", "vspwkxu", "mikncyf", "pafxpnc", "bggcmvj", "tahqf", "izchgc", "xaspz", "zwfwl", "cwgcuci",
+                "wzuzq", "rgrsyzu", "mgytix", "kqqakjw", "eekgzcm", "txbcw", "fcoxkag", "kqxac", "licntr", "vmweor",
+                "bslmfto", "jzalnup", "tuiep", "dacwc", "zntmpb", "ikexnhq", "mlioa", "klwpv", "ddhbtg", "jurwdf",
+                "jutynuo", "dlcicqo", "cnvqsq", "qqsiszn", "vqabt", "huaoigf", "bmlpczh", "dsnuy", "qrrqv", "edoxkud",
+                "uqxdk", "gyphg", "rvyzzz", "epjhqj", "dejkvae", "zczwgm", "ulisrt", "ihuayib",
+            },
+            .e=13935,
+        },
+    };
+
+    for (T t : ts) {
+        Solution solution;
+        EXPECT_EQ(solution.minimumLengthEncoding(t.inputs), t.e);
+    }
+}
+
+int main() {
+    testing::InitGoogleTest();
+
+    return RUN_ALL_TESTS();
+}
+
+
