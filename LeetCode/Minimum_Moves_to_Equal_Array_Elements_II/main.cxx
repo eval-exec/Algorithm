@@ -14,6 +14,18 @@ class Solution {
   public:
     int minMoves2(vector<int> &nums) {
         sort(nums.begin(), nums.end());
+        int mid = nums[nums.size() / 2];
+        int ret = 0;
+        for (const int &n : nums) {
+            ret += abs(n - mid);
+        }
+        return ret;
+    }
+};
+class Solution2 {
+  public:
+    int minMoves2(vector<int> &nums) {
+        sort(nums.begin(), nums.end());
         long low = nums.front();
         long high = nums.back();
         vector<long> base_low(nums.size());
